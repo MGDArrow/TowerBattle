@@ -1,0 +1,143 @@
+.bg {
+  &-bg {
+    background: $col-bg;
+  }
+  &-grey {
+    background: $col-grey;
+  }
+  &-red {
+    background: $col-red;
+  }
+  &-orange {
+    background: $col-orange;
+  }
+  &-yellow {
+    background: $col-yellow;
+  }
+  &-green {
+    background: $col-green;
+  }
+  &-turq {
+    background: $col-turq;
+  }
+  &-blue {
+    background: $col-blue;
+  }
+  &-purple {
+    background: $col-purple;
+  }
+}
+.bg-h {
+  &-bg {
+    transition: $transition-main;
+    &:hover {
+      background: $col-bg;
+    }
+  }
+  &-grey {
+    transition: $transition-main;
+    &:hover {
+      background: $col-grey;
+    }
+  }
+  &-red {
+    transition: $transition-main;
+    &:hover {
+      background: $col-red;
+    }
+  }
+  &-orange {
+    transition: $transition-main;
+    &:hover {
+      background: $col-orange;
+    }
+  }
+  &-yellow {
+    transition: $transition-main;
+    &:hover {
+      background: $col-yellow;
+    }
+  }
+  &-green {
+    transition: $transition-main;
+    &:hover {
+      background: $col-green;
+    }
+  }
+  &-turq {
+    transition: $transition-main;
+    &:hover {
+      background: $col-turq;
+    }
+  }
+  &-blue {
+    transition: $transition-main;
+    &:hover {
+      background: $col-blue;
+    }
+  }
+  &-purple {
+    transition: $transition-main;
+    &:hover {
+      background: $col-purple;
+    }
+  }
+}
+.border {
+  &-bg {
+    border: $size-border solid $col-bg;
+  }
+  &-grey {
+    border: $size-border solid $col-grey;
+  }
+  &-red {
+    border: $size-border solid $col-red;
+  }
+  &-orange {
+    border: $size-border solid $col-orange;
+  }
+  &-yellow {
+    border: $size-border solid $col-yellow;
+  }
+  &-green {
+    border: $size-border solid $col-green;
+  }
+  &-turq {
+    border: $size-border solid $col-turq;
+  }
+  &-blue {
+    border: $size-border solid $col-blue;
+  }
+  &-purple {
+    border: $size-border solid $col-purple;
+  }
+}
+.shadow {
+  &-bg {
+    box-shadow: $size-shadow $col-bg;
+  }
+  &-grey {
+    box-shadow: $size-shadow $col-grey;
+  }
+  &-red {
+    box-shadow: $size-shadow $col-red;
+  }
+  &-orange {
+    box-shadow: $size-shadow $col-orange;
+  }
+  &-yellow {
+    box-shadow: $size-shadow $col-yellow;
+  }
+  &-green {
+    box-shadow: $size-shadow $col-green;
+  }
+  &-turq {
+    box-shadow: $size-shadow $col-turq;
+  }
+  &-blue {
+    box-shadow: $size-shadow $col-blue;
+  }
+  &-purple {
+    box-shadow: $size-shadow $col-purple;
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-home">Главное меню</div>
+  <div class="app-auth">Авторизация</div>
 </template>
 
 <script setup lang="ts"></script>
