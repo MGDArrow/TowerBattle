@@ -1,0 +1,27 @@
+// SCSS переменные
+$col-black: var(--col-black);
+$col-bg: var(--col-bg);
+$col-grey: var(--col-grey);
+$col-grey-l: var(--col-grey-l);
+$col-white: var(--col-white);
+$col-blue: var(--col-blue);
+$col-red: var(--col-red);
+$col-orange: var(--col-orange);
+$col-yellow: var(--col-yellow);
+$col-green: var(--col-green);
+$col-turq: var(--col-turq);
+$col-purple: var(--col-purple);
+:root {
+  --col-black: #111;
+  --col-bg: #1d1d1d;
+  --col-grey: #414142;
+  --col-grey-l: #757575;
+  --col-white: #fff;
+  --col-blue: #2272ff;
+  --col-red: #ff2121;
+  --col-orange: #ff700b;
+  --col-yellow: #ffc30b;
+  --col-green: #2dd509;
+  --col-turq: #07a08b;
+  --col-purple: #9946d5;
+}

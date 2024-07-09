@@ -1,0 +1,64 @@
+// ----CSS RESET-----
+// Указываем box sizing
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// Убираем внутренние и внешние отступы, а также стилизацию списков с классом
+ul[class],
+ol[class] {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Убираем внешние отступы
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+// Выставляем основные настройки по-умолчанию для body
+body {
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  text-rendering: optimizespeed;
+  line-height: normal;
+}
+
+// Сбрасываем стиль ссылок
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+// Элементы ссылок, у которых нет класса, сбрасываем до дефолтных стилей
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+// Упрощаем работу с изображениями
+img {
+  display: block;
+  max-width: 100%;
+}
+
+// Наследуем шрифты для инпутов и кнопок
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}

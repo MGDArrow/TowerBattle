@@ -1,0 +1,45 @@
+{
+  "name": "towerbattleclient",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "commit": "git add --all && git cz"
+  },
+  "dependencies": {
+    "vue": "^3.4.29",
+    "vue-icomoon": "^0.6.1",
+    "vue-router": "^4.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "cz-customizable": "^7.1.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-vue": "^9.23.0",
+    "prettier": "^3.3.2",
+    "sass": "^1.77.6",
+    "stylelint": "^16.2.1",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-standard-scss": "^13.0.0",
+    "stylelint-config-standard-vue": "^1.0.0",
+    "stylelint-order": "^6.0.4",
+    "stylelint-rational-order-plugin": "^1.0.2",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1",
+    "vite-plugin-stylelint": "^5.3.1",
+    "vue-tsc": "^2.0.21"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": "config/git/commitizen.cjs"
+    }
+  }
+}

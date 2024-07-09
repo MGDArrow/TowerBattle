@@ -1,0 +1,12 @@
+@import '@/assets/reset';
+@import '@/assets/variables';
+@import 'https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap';
+.tower-battle {
+  width: 100vw;
+  height: 100dvh;
+  color: $col-white;
+  font-weight: 700;
+  font-size: 16px;
+  font-family: Play, sans-serif;
+  background: $col-black;
+}

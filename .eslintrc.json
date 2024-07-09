@@ -1,0 +1,211 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["eslint:recommended", "plugin:vue/vue3-essential", "plugin:prettier/recommended"],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["vue"],
+  "rules": {
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto",
+        "selfClosingStyle": "off"
+      }
+    ],
+    // "prettier/prettier": [
+    //   "error",
+    //   {
+    //   }
+    // ],
+    // TODO https://habr.com/ru/companies/simbirsoft/articles/674036/ — настройка ESLint для Vue проекта
+    // TODO https://www.youtube.com/watch?v=lTeza7Vxo8c — видеогайд ESLint и Preitter
+    // ! Настройка <template> секции
+    // * vue/singleline-html-element-content-newline Устанавливает перенос строки до и после содержимого однострочного элемента
+    // "vue/singleline-html-element-content-newline": [
+    //   "error",
+    //   {
+    //     "ignoreWhenNoAttributes": true,
+    //     "ignoreWhenEmpty": true,
+    //     "ignores": ["pre", "textarea"],
+    //     "externalIgnores": []
+    //   }
+    // ],
+    // * vue/attributes-order Проверка порядка атрибутов
+    "vue/attributes-order": [
+      "error",
+      {
+        "order": [
+          "DEFINITION",
+          "LIST_RENDERING",
+          "CONDITIONALS",
+          "RENDER_MODIFIERS",
+          "GLOBAL",
+          ["UNIQUE", "SLOT"],
+          "TWO_WAY_BINDING",
+          "OTHER_DIRECTIVES",
+          "OTHER_ATTR",
+          "EVENTS",
+          "CONTENT"
+        ],
+        "alphabetical": false
+      }
+    ],
+    // * vue/max-attributes-per-line Проверка на максимальное количество атрибутов в строке
+    "vue/max-attributes-per-line": [
+      "error",
+      {
+        "singleline": {
+          "max": 20
+        },
+        "multiline": {
+          "max": 1
+        }
+      }
+    ],
+    // * vue/html-self-closing Проверка на самозакрывающийся тег или компонент
+    "vue/html-self-closing": [
+      "error",
+      {
+        "html": {
+          "void": "any",
+          "normal": "always",
+          "component": "always"
+        },
+        "svg": "always",
+        "math": "always"
+      }
+    ],
+    // * vue/html-indent Проверка последовательного отступа в шаблоне <template>
+    "vue/html-indent": [
+      "error",
+      2,
+      {
+        "attribute": 1,
+        "baseIndent": 1,
+        "closeBracket": 0,
+        "alignAttributesVertically": true,
+        "ignores": []
+      }
+    ],
+    // * #vue/component-name-in-template-casing Проверка регистра для стиля именования компонентов в шаблоне
+    "vue/component-name-in-template-casing": [
+      "error",
+      "PascalCase",
+      {
+        "registeredComponentsOnly": true
+      }
+    ],
+    // ! Настройка <script> секции
+    // * vue/component-definition-name-casing Проверка на определенный регистр для имени компонента
+    "vue/component-definition-name-casing": ["error", "PascalCase"],
+    // * vue/match-component-file-name Проверка имени компонента — оно должно соответствовать имени файла, в котором он находится
+    "vue/match-component-file-name": [
+      "error",
+      {
+        "extensions": ["vue"],
+        "shouldMatchCase": false
+      }
+    ],
+    // * vue/no-dupe-keys Запретить дублирование имен полей
+    "vue/no-dupe-keys": [
+      "error",
+      {
+        "groups": []
+      }
+    ],
+    // * vue/order-in-components Порядок свойств в компонентах
+    "vue/order-in-components": [
+      "error",
+      {
+        "order": [
+          "el",
+          "name",
+          "key",
+          "parent",
+          "functional",
+          ["delimiters", "comments"],
+          ["components", "directives", "filters"],
+          "extends",
+          "mixins",
+          ["provide", "inject"],
+          "ROUTER_GUARDS",
+          "layout",
+          "middleware",
+          "validate",
+          "scrollToTop",
+          "transition",
+          "loading",
+          "inheritAttrs",
+          "model",
+          ["props", "propsData"],
+          "emits",
+          "setup",
+          "asyncData",
+          "data",
+          "fetch",
+          "head",
+          "computed",
+          "watch",
+          "watchQuery",
+          "LIFECYCLE_HOOKS",
+          "methods",
+          ["template", "render"],
+          "renderError"
+        ]
+      }
+    ],
+    // ! Общие настройки ESLint
+    // "comma-dangle": [
+    //   // * comma-dangle Проверка  запятых:
+    //   "error",
+    //   {
+    //     "arrays": "auto",
+    //     "objects": "always",
+    //     "imports": "never",
+    //     "exports": "never",
+    //     "functions": "never"
+    //   }
+    // ],
+    "no-var": "error", // * Запрет на var
+    "no-console": "warn", // * Без console.log
+    "no-debugger": "warn", // * Без debugger
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }], // * Запрещает неиспользуемые переменные.
+    "no-mixed-operators": [
+      // * Заключение сложных выражений в круглые скобки проясняет замысел разработчика
+      "error",
+      {
+        "groups": [
+          ["+", "-", "*", "/", "%", "**"],
+          ["&", "|", "^", "~", "<<", ">>", ">>>"],
+          ["==", "!=", "===", "!==", ">", ">=", "<", "<="],
+          ["&&", "||"],
+          ["in", "instanceof"]
+        ],
+        "allowSamePrecedence": true
+      }
+    ],
+    "arrow-parens": ["error", "always"], // * Скобки в стрелочной функции
+    "constructor-super": "off", // * Конструкторы производных классов должны вызывать super(). Конструкторы не производных классов не должны вызывать super().
+    "import/extensions": "off", // * Обеспечить согласованное использование расширения файла в пути импорта
+    "import/prefer-default-export": "off", // * ESLint предпочитает экспорт по умолчанию импорт/предпочитает экспорт по умолчанию
+    "no-param-reassign": "off", //* Без переназначения параметров
+    "prefer-destructuring": [
+      "error",
+      {
+        // * Требуется деструктуризация массивов и/или объектов.
+        "array": true,
+        "object": true
+      },
+      {
+        "enforceForRenamedProperties": false
+      }
+    ],
+    "lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }] // * Требует или запрещает пустую строку между членами класса.
+  }
+}
