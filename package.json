@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
+    "test": "vitest",
     "commit": "git checkout main && git add --all && git cz"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "typescript": "^5.2.2",
     "vite": "^5.3.1",
     "vite-plugin-stylelint": "^5.3.1",
+    "vitest": "^2.0.1",
     "vue-tsc": "^2.0.21"
   },
   "config": {

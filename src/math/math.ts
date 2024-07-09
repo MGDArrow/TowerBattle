@@ -8,7 +8,7 @@ export class MyMath {
   }
 
   //** Округление к ближайшему**//
-  static roundTo(num: number, multiple: number): number {
+  static roundTo(num: number, multiple: number = 10): number {
     return Math.round(num / multiple) * multiple;
   }
 
@@ -60,6 +60,7 @@ export class MyMath {
 
   //** Время в читаемом виде **//
   static toTime(ms: number): string {
+    if (ms <1000) return `0c`;
     const days: number = Math.floor(ms / (1000 * 60 * 60 * 24));
     const hours: number = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes: number = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
