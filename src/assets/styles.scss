@@ -10,4 +10,11 @@
   font-size: 16px;
   font-family: Play, sans-serif;
   background: $col-black;
+  user-select: none;
+  & h1 {
+    width: 100%;
+    padding: 1dvh;
+    text-align: center;
+    text-transform: uppercase;
+  }
 }

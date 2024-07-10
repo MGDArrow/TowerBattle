@@ -84,6 +84,9 @@
   }
 }
 .border {
+  &-white {
+    border: $size-border solid $col-white;
+  }
   &-bg {
     border: $size-border solid $col-bg;
   }
@@ -139,5 +142,21 @@
   }
   &-purple {
     box-shadow: $size-shadow $col-purple;
+  }
+}
+.shadow-h {
+  &-blue {
+    transition: $transition-main;
+    &:hover,
+    &:focus {
+      box-shadow: $size-shadow $col-blue;
+    }
+  }
+  &-orange {
+    transition: $transition-main;
+    &:hover,
+    &:focus {
+      box-shadow: $size-shadow $col-orange;
+    }
   }
 }
