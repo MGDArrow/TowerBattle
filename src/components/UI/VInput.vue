@@ -3,18 +3,13 @@
 </template>
 
 <script setup lang="ts">
-  import { ModelRef } from 'vue';
+  interface Props {
+    type: string;
+    placeholder: string;
+  }
 
-  const modelValue: ModelRef<unknown, string> = defineModel();
-  defineProps({
-    type: {
-      type: String,
-      default: 'text',
-    },
-    placeholder: {
-      type: String,
-    },
-  });
+  const modelValue = defineModel<string>();
+  withDefaults(defineProps<Props>(), { type: 'text' });
 </script>
 
 <style lang="scss">

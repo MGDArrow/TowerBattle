@@ -10,15 +10,16 @@
 </template>
 
 <script setup lang="ts">
-  import { ComputedRef, computed } from 'vue';
+  import { computed } from 'vue';
 
   const modelValue = defineModel();
-  const props = defineProps({
-    color: String,
-  });
+  interface Props {
+    color: string;
+  }
+  const props = defineProps<Props>();
 
-  const labelColor: ComputedRef<string> = computed(() => (modelValue.value ? 'var(--col-white)' : 'var(--col-grey-l)'));
-  const boxClasses: ComputedRef<string> = computed(() =>
+  const labelColor = computed<string>(() => (modelValue.value ? 'var(--col-white)' : 'var(--col-grey-l)'));
+  const boxClasses = computed<string>(() =>
     modelValue.value ? `border-${props.color} bg-${props.color} shadow-${props.color}` : 'border-grey',
   );
 </script>
