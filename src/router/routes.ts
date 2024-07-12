@@ -5,7 +5,7 @@ export const routes = [
     component: () => import('@/views/AppHome.vue'),
   },
   {
-    name: 'Home',
+    name: 'Auth',
     path: '/auth',
     component: () => import('@/views/AppAuth.vue'),
   },

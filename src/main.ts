@@ -1,8 +1,8 @@
 import { createApp } from 'vue';
-import App from './App.vue';
+import App from '@/App.vue';
 import '@/assets/styles.scss';
 
-import { router } from '@/router/router.ts';
+import { router } from '@/router/router';
 
 import VIcon from '@/components/UI/VIcon.vue';
 import VButton from '@/components/UI/VButton.vue';

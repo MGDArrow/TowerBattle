@@ -1,4 +1,7 @@
 .bg {
+  &-black {
+    background: $col-black;
+  }
   &-bg {
     background: $col-bg;
   }
@@ -159,4 +162,10 @@
       box-shadow: $size-shadow $col-orange;
     }
   }
+}
+.position-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

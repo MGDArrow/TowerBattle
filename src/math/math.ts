@@ -26,7 +26,7 @@ export class MyMath {
   static getStartPosition(size: number): [Ref<number>, Ref<number>] {
     const xExtreeme: boolean = Math.random() < 0.5;
     const signExtreeme: boolean = Math.random() < 0.5;
-    const sceneWidth: number = window.innerHeight * 1.5;
+    const sceneWidth: number = window.innerWidth;
     const sceneHeight: number = window.innerHeight;
     return xExtreeme
       ? [ref(signExtreeme ? 0 - size : sceneWidth + size), ref(this.random(0 - size, sceneHeight + size))]
@@ -60,7 +60,7 @@ export class MyMath {
 
   //** Время в читаемом виде **//
   static toTime(ms: number): string {
-    if (ms <1000) return `0c`;
+    if (ms < 1000) return `0c`;
     const days: number = Math.floor(ms / (1000 * 60 * 60 * 24));
     const hours: number = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes: number = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
