@@ -1,9 +1,9 @@
 <template>
   <div class="home-play">
     <div class="home-play__info border-orange shadow-orange bg-bg">
-      <div class="home-play__arrow flex-center bg-h-grey"><VIcon :name="'angle-left'" /></div>
+      <div class="home-play__arrow flex-center bg-h-grey" @click="changeLvl(-1)"><VIcon :name="'angle-left'" /></div>
       <div class="home-play__lvl bg-h-grey">
-        <div class="home-play__lvl-current">Уровень: 30 | Этап: 10</div>
+        <div class="home-play__lvl-current">Уровень: {{ Settings.lvl.value }} | Этап: {{ Settings.stage.value }}</div>
         <div class="home-play__lvl-info lvlinfo">
           <div class="lvlinfo__max">
             Максимум: <br />
@@ -12,13 +12,19 @@
           <div class="lvlinfo__entry">Заходы: <br />100 заходов</div>
         </div>
       </div>
-      <div class="home-play__arrow flex-center bg-h-grey"><VIcon :name="'angle-right'" /></div>
+      <div class="home-play__arrow flex-center bg-h-grey" @click="changeLvl(1)"><VIcon :name="'angle-right'" /></div>
     </div>
     <div class="home-play__btn border-blue shadow-blue bg-bg bg-h-blue flex-center">Начать игру</div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import Settings from '@/logic/settings';
+
+  function changeLvl(inc: number): void {
+    Settings.changeLvl(inc);
+  }
+</script>
 
 <style lang="scss">
   .home-play {

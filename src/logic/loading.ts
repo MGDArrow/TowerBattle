@@ -1,10 +1,11 @@
 import { Ref, ref } from 'vue';
-import { Vector } from '../math/math';
+import { Vector } from '@/math/math';
 
 class Loading {
   static #onlyInstance: Loading | null = null;
 
   public particles: Ref<Array<Particle>> = ref([]);
+  // Включить
   public percent: Ref<number> = ref(100);
 
   constructor() {
@@ -13,6 +14,7 @@ class Loading {
   }
 
   init = (): void => {
+    // Включить
     this.percent.value = 100;
     const particlesArray: Array<Particle> = [];
     for (let i = 0; i < 100; i++) particlesArray.push(new Particle());

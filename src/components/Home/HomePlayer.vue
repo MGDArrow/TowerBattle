@@ -3,22 +3,34 @@
     <div class="menu-player__info">
       <div class="menu-player__info-ava"></div>
       <div class="menu-player__info-user">
-        <div class="menu-player__info-username">MGDArrow</div>
-        <div class="menu-player__info-userlvl">Уровень 8</div>
-        <div class="menu-player__info-userexp">10/15</div>
+        <div class="menu-player__info-username">{{ User.username }}</div>
+        <div class="menu-player__info-userlvl">Уровень {{ userLvl.lvl }}</div>
+        <div class="menu-player__info-userexp" :style="{ background: expBar }">{{ userExp }}</div>
       </div>
     </div>
     <div class="menu-player__valuta">
-      <span class="color-yellow">20 <VIcon :name="'coins'" /></span>
-      <span class="color-turq">0 <VIcon :name="'diamond'" /></span>
-      <span class="color-purple">0 <VIcon :name="'ultimate'" /></span>
-      <span class="color-blue">0 <VIcon :name="'ticket'" /></span>
-      <span class="color-orange">0 <VIcon :name="'award'" /></span>
+      <span class="color-yellow">{{ MyMath.toText(User.valuta.value.coins) }} <VIcon :name="'coins'" /></span>
+      <span class="color-turq">{{ User.valuta.value.diamonds }} <VIcon :name="'diamond'" /></span>
+      <span class="color-purple">{{ User.valuta.value.ultimates }} <VIcon :name="'ultimate'" /></span>
+      <span class="color-blue">{{ User.valuta.value.tickets }} <VIcon :name="'ticket'" /></span>
+      <span class="color-orange">{{ User.valuta.value.awards }} <VIcon :name="'award'" /></span>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import User from '@/logic/user';
+  import { MyMath } from '@/math/math';
+  import { computed } from 'vue';
+
+  const userLvl = computed(() => User.lvl.value);
+  const userExp = computed(() => {
+    return `${MyMath.toText(userLvl.value.exp_lvl)} / ${MyMath.toText(userLvl.value.exp_next)} (${MyMath.round(userLvl.value.percent)}%)`;
+  });
+  const expBar = computed(
+    () => `linear-gradient(to right, var(--col-purple) ${userLvl.value.percent}%, var(--col-bg) 0%)`,
+  );
+</script>
 
 <style lang="scss">
   .menu-player {
@@ -45,7 +57,6 @@
         margin-top: 1dvh;
         font-size: 1rem;
         text-align: center;
-        background: $col-purple;
         outline: 0.3dvh solid $col-purple;
         outline-offset: 0.3dvh;
       }
