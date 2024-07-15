@@ -9,5 +9,5 @@
     name: string;
     color?: string;
   }
-  defineProps<Props>();
+  const props = defineProps<Props>();
 </script>

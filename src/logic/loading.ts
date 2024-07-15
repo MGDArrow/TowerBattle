@@ -5,7 +5,7 @@ class Loading {
   static #onlyInstance: Loading | null = null;
 
   public particles: Ref<Array<Particle>> = ref([]);
-  public percent: Ref<number> = ref(0);
+  public percent: Ref<number> = ref(100);
 
   constructor() {
     if (Loading.#onlyInstance) return Loading.#onlyInstance;
@@ -13,7 +13,7 @@ class Loading {
   }
 
   init = (): void => {
-    this.percent.value = 0;
+    this.percent.value = 100;
     const particlesArray: Array<Particle> = [];
     for (let i = 0; i < 100; i++) particlesArray.push(new Particle());
     this.particles.value = particlesArray;
