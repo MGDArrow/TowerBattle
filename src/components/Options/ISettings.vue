@@ -1,5 +1,5 @@
 <template>
-  <div class="options__settings frame-blue bg-bg">
+  <div class="options__settings frame-blue shadow-h-blue bg-bg">
     <h1 class="bg-blue">Настройки</h1>
   </div>
 </template>

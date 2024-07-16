@@ -1,5 +1,5 @@
 <template>
-  <div class="options__ultimates frame-purple bg-bg">
+  <div class="options__ultimates frame-purple shadow-h-purple bg-bg">
     <h1 class="bg-purple">Ультимейты</h1>
   </div>
 </template>

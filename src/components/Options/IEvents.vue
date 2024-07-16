@@ -1,5 +1,5 @@
 <template>
-  <div class="options__events frame-green bg-bg">
+  <div class="options__events frame-green shadow-h-green bg-bg">
     <h1 class="bg-green">События</h1>
   </div>
 </template>

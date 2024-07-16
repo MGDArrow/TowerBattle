@@ -1,5 +1,5 @@
 <template>
-  <div class="options__statistic frame-turq bg-bg">
+  <div class="options__statistic frame-turq shadow-h-turq bg-bg">
     <h1 class="bg-turq">Статистика</h1>
   </div>
 </template>

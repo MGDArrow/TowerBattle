@@ -1,5 +1,5 @@
 <template>
-  <div class="options__updates frame-orange bg-bg">
+  <div class="options__updates frame-orange shadow-h-orange bg-bg">
     <h1 class="bg-orange">Улучшения</h1>
   </div>
 </template>

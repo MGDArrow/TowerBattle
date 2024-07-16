@@ -1,5 +1,5 @@
 <template>
-  <div class="options__lab frame-blue bg-bg">
+  <div class="options__lab frame-blue shadow-h-blue bg-bg">
     <h1 class="bg-blue">Лаборатория</h1>
   </div>
 </template>

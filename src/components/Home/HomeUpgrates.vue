@@ -1,14 +1,28 @@
 <template>
   <div class="home-upgrates">
-    <div class="border-orange bg-bg bg-h-orange shadow-orange flex-center"><VIcon :name="'tools'" /></div>
-    <div class="border-turq bg-bg bg-h-turq shadow-turq flex-center"><VIcon :name="'cards'" /></div>
-    <div class="border-red bg-bg bg-h-red shadow-red flex-center"><VIcon :name="'mod'" /></div>
-    <div class="border-purple bg-bg bg-h-purple shadow-purple flex-center"><VIcon :name="'ultimate'" /></div>
-    <div class="border-blue bg-bg bg-h-blue shadow-blue flex-center"><VIcon :name="'lab'" /></div>
+    <div class="border-orange bg-bg bg-h-orange shadow-orange flex-center" @click="updateOptionalPanel('Updates')">
+      <VIcon :name="'tools'" />
+    </div>
+    <div class="border-turq bg-bg bg-h-turq shadow-turq flex-center" @click="updateOptionalPanel('Cards')">
+      <VIcon :name="'cards'" />
+    </div>
+    <div class="border-red bg-bg bg-h-red shadow-red flex-center" @click="updateOptionalPanel('Mods')">
+      <VIcon :name="'mod'" />
+    </div>
+    <div class="border-purple bg-bg bg-h-purple shadow-purple flex-center" @click="updateOptionalPanel('Ultimates')">
+      <VIcon :name="'ultimate'" />
+    </div>
+    <div class="border-blue bg-bg bg-h-blue shadow-blue flex-center" @click="updateOptionalPanel('Lab')">
+      <VIcon :name="'lab'" />
+    </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import { inject } from 'vue';
+  import { TOptionalPanel } from '@/types/optional';
+  const { updateOptionalPanel } = inject('optionalPanel', { updateOptionalPanel: (_newOption: TOptionalPanel) => {} });
+</script>
 
 <style lang="scss">
   .home-upgrates {

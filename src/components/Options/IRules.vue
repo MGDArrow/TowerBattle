@@ -1,5 +1,5 @@
 <template>
-  <div class="options__rules frame-orange bg-bg">
+  <div class="options__rules frame-orange shadow-h-orange bg-bg">
     <h1 class="bg-orange">Правила игры</h1>
   </div>
 </template>

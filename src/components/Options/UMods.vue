@@ -1,5 +1,5 @@
 <template>
-  <div class="options__mods frame-red bg-bg">
+  <div class="options__mods frame-red shadow-h-red bg-bg">
     <h1 class="bg-red">Модификации</h1>
   </div>
 </template>

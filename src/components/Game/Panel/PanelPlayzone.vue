@@ -1,8 +1,8 @@
 <template>
   <div class="game__playzone">
-    <div class="game__playzone-option frame-orange"></div>
-    <div class="game__playzone-center frame-blue"></div>
-    <div class="game__playzone-option frame-turq"></div>
+    <div class="game__playzone-option frame-orange shadow-h-orange"></div>
+    <div class="game__playzone-center frame-blue shadow-h-blue"></div>
+    <div class="game__playzone-option frame-turq shadow-h-turq"></div>
   </div>
 </template>
 

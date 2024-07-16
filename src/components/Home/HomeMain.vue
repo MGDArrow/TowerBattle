@@ -1,5 +1,5 @@
 <template>
-  <div class="app-home__main frame-purple">
+  <div class="app-home__main frame-purple shadow-h-purple">
     <HomeBackground />
     <HomeMenu />
     <HomePlay />
@@ -19,7 +19,8 @@
 <style lang="scss">
   .app-home__main {
     position: relative;
-    flex-grow: 1;
+    width: 100%;
     height: 100%;
+    transition: $transition-main;
   }
 </style>

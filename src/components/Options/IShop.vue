@@ -1,5 +1,5 @@
 <template>
-  <div class="options__shop frame-yellow bg-bg">
+  <div class="options__shop frame-yellow shadow-h-yellow bg-bg">
     <h1 class="bg-yellow">Магазин</h1>
   </div>
 </template>
