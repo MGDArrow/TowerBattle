@@ -305,6 +305,104 @@
     color: $col-purple;
   }
 }
+.scroll {
+  &-grey-l {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0.5dvh;
+    }
+    &::-webkit-scrollbar-track {
+      background: $col-grey;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $col-grey-l;
+    }
+  }
+  &-red {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0.5dvh;
+    }
+    &::-webkit-scrollbar-track {
+      background: $col-grey;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $col-red;
+    }
+  }
+  &-orange {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0.5dvh;
+    }
+    &::-webkit-scrollbar-track {
+      background: $col-grey;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $col-orange;
+    }
+  }
+  &-yellow {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0.5dvh;
+    }
+    &::-webkit-scrollbar-track {
+      background: $col-grey;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $col-yellow;
+    }
+  }
+  &-green {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0.5dvh;
+    }
+    &::-webkit-scrollbar-track {
+      background: $col-grey;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $col-green;
+    }
+  }
+  &-turq {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0.5dvh;
+    }
+    &::-webkit-scrollbar-track {
+      background: $col-grey;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $col-turq;
+    }
+  }
+  &-blue {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0.5dvh;
+    }
+    &::-webkit-scrollbar-track {
+      background: $col-grey;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $col-blue;
+    }
+  }
+  &-purple {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 0.5dvh;
+    }
+    &::-webkit-scrollbar-track {
+      background: $col-grey;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $col-purple;
+    }
+  }
+}
 .position-center {
   position: absolute;
   top: 50%;
