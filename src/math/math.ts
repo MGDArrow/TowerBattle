@@ -1,6 +1,9 @@
 /* eslint-disable no-mixed-operators */
 import { Ref, ref } from 'vue';
-
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+dayjs.extend(localizedFormat);
+dayjs.locale('ru');
 export class MyMath {
   //** Округление **//
   static round(value: number, round: number = 2): number {
@@ -146,5 +149,10 @@ export class Vector {
   static isCollisionFast(Ax: number, Ay: number, Ar: number, Bx: number, By: number, Br: number): boolean {
     const [ABx, ABy] = this.getVector(Ax, Ay, Bx, By);
     return this.isCollision(ABx, ABy, Ar, Br);
+  }
+}
+export class Time {
+  static toChat(time: number): string {
+    return dayjs(time).format('DD/MM HH:mm');
   }
 }

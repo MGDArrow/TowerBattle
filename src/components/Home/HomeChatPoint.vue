@@ -14,12 +14,14 @@
       <span v-if="poit.to" class="chat__point-addressee">@{{ poit.to }}</span
       >{{ poit.message }}
     </div>
+    <div class="chat__point-time">{{ Time.toChat(poit.time) }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
   import Chat from '@/logic/chat';
   import User from '@/logic/user';
+  import { Time } from '@/math/math';
 
   const emit = defineEmits<{
     getTo: [value: string];
@@ -35,7 +37,7 @@
     position: relative;
     width: 75%;
     margin-top: 1dvh;
-    padding: 1dvh;
+    padding: 0.3dvh 1dvh;
     font-size: 0.9rem;
     word-wrap: break-word;
     cursor: pointer;
@@ -47,11 +49,24 @@
       font-weight: 700;
     }
     &-message {
+      margin-bottom: 0.3dvh;
       font-weight: 300;
     }
     &-addressee {
       margin-right: 0.5dvh;
       color: $col-purple;
+    }
+    &-time {
+      color: $col-grey-l;
+      font-weight: 300;
+      text-align: right;
+      transition: $transition-main;
+    }
+    &:hover {
+      & .chat__point-time {
+        color: $col-purple;
+        font-weight: 600;
+      }
     }
     &--my {
       margin-left: 25%;

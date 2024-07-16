@@ -11,6 +11,7 @@
     "commit": "git checkout main && git add --all && git cz"
   },
   "dependencies": {
+    "dayjs": "^1.11.11",
     "vue": "^3.4.29",
     "vue-icomoon": "^0.6.1",
     "vue-router": "^4.4.0"
