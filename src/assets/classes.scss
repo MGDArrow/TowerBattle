@@ -181,11 +181,25 @@
   }
 }
 .shadow-h {
-  &-blue {
+  &-bg {
     transition: $transition-main;
     &:hover,
     &:focus {
-      box-shadow: $size-shadow $col-blue;
+      box-shadow: $size-shadow $col-bg;
+    }
+  }
+  &-grey {
+    transition: $transition-main;
+    &:hover,
+    &:focus {
+      box-shadow: $size-shadow $col-grey;
+    }
+  }
+  &-red {
+    transition: $transition-main;
+    &:hover,
+    &:focus {
+      box-shadow: $size-shadow $col-red;
     }
   }
   &-orange {
@@ -193,6 +207,34 @@
     &:hover,
     &:focus {
       box-shadow: $size-shadow $col-orange;
+    }
+  }
+  &-yellow {
+    transition: $transition-main;
+    &:hover,
+    &:focus {
+      box-shadow: $size-shadow $col-yellow;
+    }
+  }
+  &-green {
+    transition: $transition-main;
+    &:hover,
+    &:focus {
+      box-shadow: $size-shadow $col-green;
+    }
+  }
+  &-turq {
+    transition: $transition-main;
+    &:hover,
+    &:focus {
+      box-shadow: $size-shadow $col-turq;
+    }
+  }
+  &-blue {
+    transition: $transition-main;
+    &:hover,
+    &:focus {
+      box-shadow: $size-shadow $col-blue;
     }
   }
   &-purple {

@@ -1,7 +1,7 @@
 <template>
   <div class="app-home position-center">
     <HomeMain />
-    <!-- <div class="app-home__info frame-orange">2</div> -->
+    <div class="app-home__info frame-orange">2</div>
   </div>
 </template>
 

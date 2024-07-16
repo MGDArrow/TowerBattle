@@ -9,4 +9,9 @@ export const routes = [
     path: '/auth',
     component: () => import('@/views/AppAuth.vue'),
   },
+  {
+    name: 'Game',
+    path: '/game',
+    component: () => import('@/views/AppGame.vue'),
+  },
 ];
