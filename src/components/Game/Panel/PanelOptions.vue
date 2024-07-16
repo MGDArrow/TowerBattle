@@ -15,7 +15,7 @@
       <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center"><VIcon :name="'gear'" /></div>
     </div>
     <div class="game__options-block flex-center">
-      <div class="bg-bg border-grey bg-h-grey shadow-h-grey flex-center"><VIcon :name="'wave'" /></div>
+      <div class="bg-bg border-grey-l bg-h-grey-l shadow-h-grey-l flex-center"><VIcon :name="'wave'" /></div>
       <div class="bg-bg border-yellow bg-h-yellow shadow-h-yellow flex-center"><VIcon :name="'shop'" /></div>
       <div class="bg-bg border-turq bg-h-turq shadow-h-turq flex-center"><VIcon :name="'statistic'" /></div>
       <div class="bg-bg border-orange bg-h-orange shadow-h-orange flex-center"><VIcon :name="'book'" /></div>
