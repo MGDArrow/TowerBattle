@@ -1,48 +1,18 @@
 <template>
   <div class="home-chat">
     <div class="home-chat__body">
-      <div class="home-chat__history bg-bg border-purple">
-        <div class="chat__point chat__point--my border-purple shadow-h-purple">
-          <div class="chat__point-username">MGDArrow</div>
-          <div class="chat__point-message">Привет, не подскажите, как играть в эту игрушку??</div>
-        </div>
-        <div class="chat__point border-purple shadow-h-purple">
-          <div class="chat__point-username">Vadim228</div>
-          <div class="chat__point-message">
-            <span class="chat__point-addressee">@MGDArrow</span>Да без проблем, сначала правила прочитай
-          </div>
-        </div>
-        <div class="chat__point chat__point--continue border-purple shadow-h-purple">
-          <div class="chat__point-username">Vadim228</div>
-          <div class="chat__point-message">После этого просто начинай игру и делай упор на уровень</div>
-        </div>
-        <div class="chat__point chat__point--continue border-purple shadow-h-purple">
-          <div class="chat__point-username">Vadim228</div>
-          <div class="chat__point-message">Ну и набирай монеты, не забывай апать башню</div>
-        </div>
-        <div class="chat__point chat__point--continue border-purple shadow-h-purple">
-          <div class="chat__point-username">Vadim228</div>
-          <div class="chat__point-message">Карточки когда откроются, набирай как можно больше</div>
-        </div>
-        <div class="chat__point chat__point--continue border-purple shadow-h-purple">
-          <div class="chat__point-username">Vadim228</div>
-          <div class="chat__point-message">А еще, чтобы лаборатория не простаивала</div>
-        </div>
-        <div class="chat__point chat__point border-purple shadow-h-purple">
-          <div class="chat__point-username">IgorAKNagibator</div>
-          <div class="chat__point-message">
-            <span class="chat__point-addressee">@Vadim228</span>Да, уровень очень важен в игре!!
-          </div>
-        </div>
-        <div class="chat__point chat__point--my border-purple shadow-h-purple">
-          <div class="chat__point-username">MGDArrow</div>
-          <div class="chat__point-message">Спасибо, ребят, помогли</div>
-        </div>
+      <div class="home-chat__history bg-bg border-purple" ref="chatHistory">
+        <HomeChatPoint @getTo="(e) => getTo(e)" />
       </div>
       <div class="home-chat__message">
-        <div class="home-chat__to bg-purple shadow-h-purple">@Vadim228</div>
-        <VInput class="bg-bg border-purple shadow-h-purple" v-model="message" :placeholder="'Введите сообщение'" />
-        <span class="bg-purple flex-center shadow-h-purple">
+        <div class="home-chat__to bg-purple shadow-h-purple" v-if="to !== ''" @click="to = ''">@{{ to }}</div>
+        <VInput
+          class="bg-bg border-purple shadow-h-purple"
+          v-model="message"
+          :placeholder="'Введите сообщение'"
+          ref="chatInput"
+        />
+        <span class="bg-purple flex-center shadow-h-purple" @click="sendMessage()">
           <VIcon :name="'send'" />
         </span>
       </div>
@@ -51,9 +21,45 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { onMounted, onUnmounted, ref } from 'vue';
+  import Chat from '@/logic/chat';
+  import HomeChatPoint from '@/components/Home/HomeChatPoint.vue';
+  import VInput from '@/components/UI/VInput.vue';
 
   const message = ref('');
+  const to = ref('');
+
+  const chatHistory = ref<HTMLInputElement | null>(null);
+  const chatInput = ref<InstanceType<typeof VInput> | null>(null);
+
+  function getTo(from: string) {
+    to.value = from;
+    chatInput.value?.focus();
+  }
+
+  function sendMessage(): void {
+    Chat.sendMessage(message.value, to.value);
+    message.value = '';
+    to.value = '';
+    setTimeout(() => {
+      if (chatHistory.value) chatHistory.value.scrollTop = 1e9;
+    }, 10);
+  }
+
+  function sendMessageEnter({ key }: KeyboardEvent) {
+    if (message.value !== '' && key === 'Enter') sendMessage();
+  }
+
+  onMounted(() => {
+    document.addEventListener('keydown', sendMessageEnter);
+    setTimeout(() => {
+      if (chatHistory.value) chatHistory.value.scrollTop = 1e9;
+    }, 10);
+  });
+
+  onUnmounted(() => {
+    document.removeEventListener('keypress', sendMessageEnter);
+  });
 </script>
 
 <style lang="scss">
@@ -73,7 +79,7 @@
       flex: 1;
       margin-bottom: 1dvh;
       padding: 1dvh;
-      overflow: auto;
+      overflow: hidden auto;
       &::-webkit-scrollbar {
         width: 0.5dvh;
       }
@@ -108,51 +114,6 @@
       font-size: 0.8rem;
       background: $col-purple;
       cursor: pointer;
-    }
-  }
-  .chat__point {
-    position: relative;
-    width: 75%;
-    margin-top: 1dvh;
-    padding: 1dvh;
-    font-size: 0.9rem;
-    cursor: pointer;
-    &:first-child {
-      margin-top: 0;
-    }
-    &-username {
-      margin-bottom: 0.5dvh;
-      font-weight: 700;
-    }
-    &-message {
-      font-weight: 300;
-    }
-    &-addressee {
-      margin-right: 0.5dvh;
-      color: $col-purple;
-    }
-    &--my {
-      margin-left: 25%;
-      background: $col-grey;
-      cursor: auto;
-    }
-    &--continue {
-      margin-top: 0.3dvh;
-      & .chat__point-username {
-        display: none;
-      }
-      &::before,
-      &::after {
-        position: absolute;
-        top: -0.9dvh;
-        left: 15%;
-        width: 0.5dvh;
-        height: 0.9dvh;
-        content: ' ';
-      }
-      &::after {
-        left: 85%;
-      }
     }
   }
 </style>
