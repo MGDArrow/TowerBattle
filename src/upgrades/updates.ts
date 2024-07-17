@@ -3,8 +3,9 @@ import { MyMath } from '@/math/math';
 import CONST from '@/math/const';
 import Settings from '@/logic/settings';
 import User from '@/logic/user';
+import { IUpdatesDirection, IUpdatesFull } from '@/types/updates';
 
-const ATTACK_UPDATES = {
+const ATTACK_UPDATES: IUpdatesDirection = {
   basic: {
     name: 'Базовые улучшения',
     lvl_access: 1,
@@ -52,7 +53,7 @@ const ATTACK_UPDATES = {
           return 0.95 + (this.lvl + this.lvl_const) * 0.05;
         },
         get text() {
-          return MyMath.round(this.count);
+          return MyMath.round(this.count).toString();
         },
         getPrice(inc = 0) {
           return Math.floor(2 * Math.pow(1.5, this.lvl + inc));
@@ -170,7 +171,7 @@ const ATTACK_UPDATES = {
           return 1 + (this.lvl + this.lvl_const) * 1;
         },
         get text() {
-          return this.count;
+          return this.count.toString();
         },
         getPrice(inc = 0) {
           return Math.floor(2 * Math.pow(1.5, this.lvl + inc));
@@ -314,7 +315,7 @@ const ATTACK_UPDATES = {
           return 1 + (this.lvl + this.lvl_const) * 1;
         },
         get text() {
-          return this.count;
+          return this.count.toString();
         },
         getPrice(inc = 0) {
           return Math.floor(2 * Math.pow(1.5, this.lvl + inc));
@@ -412,7 +413,7 @@ const ATTACK_UPDATES = {
   },
 };
 
-const DEFENCE_UPDATES = {
+const DEFENCE_UPDATES: IUpdatesDirection = {
   basic: {
     name: 'Базовые улучшения',
     lvl_access: 1,
@@ -826,7 +827,7 @@ const DEFENCE_UPDATES = {
   },
 };
 
-const PERIMETER_UPDATES = {
+const PERIMETER_UPDATES: IUpdatesDirection = {
   basic: {
     name: 'Базовые улучшения',
     lvl_access: 1,
@@ -1117,7 +1118,7 @@ const PERIMETER_UPDATES = {
           return this.lvl + this.lvl_const;
         },
         get text() {
-          return this.count;
+          return this.count.toString();
         },
         getPrice(inc = 0) {
           return Math.floor(2 * Math.pow(1.5, this.lvl + inc));
@@ -1241,7 +1242,7 @@ const PERIMETER_UPDATES = {
   },
 };
 
-const MONEY_UPDATES = {
+const MONEY_UPDATES: IUpdatesDirection = {
   basic: {
     name: 'Базовые улучшения',
     lvl_access: 1,
@@ -1613,7 +1614,7 @@ const MONEY_UPDATES = {
   },
 };
 
-export default {
+const UPDATES: IUpdatesFull = {
   attack: {
     name: 'Атака',
     color: 'red',
@@ -1622,7 +1623,7 @@ export default {
   },
   defence: {
     name: 'Защита',
-    color: 'basic',
+    color: 'blue',
     icon: 'shield',
     groups: DEFENCE_UPDATES,
   },
@@ -1639,3 +1640,5 @@ export default {
     groups: MONEY_UPDATES,
   },
 };
+
+export default UPDATES;

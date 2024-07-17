@@ -7,23 +7,21 @@ import Statistic from '@/services/statistic';
 import User from '@/logic/user';
 import UPDATES from '@/upgrades/updates';
 import { ref } from 'vue';
+import { IUpdate, IUpdatesFull } from '@/types/updates';
 
 class Updates {
-  static #onlyInstance = 0;
+  static #onlyInstance: Updates | null = null;
+  private _updates = ref(UPDATES);
+  public coef = ref({
+    variables: ['x1', 'x5', 'x10', 'x100', 'Max'],
+    now: 0,
+  });
   constructor() {
     if (Updates.#onlyInstance) return Updates.#onlyInstance;
     Updates.#onlyInstance = this;
-
-    this._updates = ref(UPDATES);
-    this.coef = ref({
-      variables: ['x1', 'x5', 'x10', 'x100', 'Max'],
-      now: 0,
-    });
-
-    this.prototypeLocal();
   }
 
-  get updates() {
+  get updates(): IUpdatesFull {
     return this._updates.value;
   }
 
@@ -31,33 +29,7 @@ class Updates {
     this._updates.value = updates;
   }
 
-  prototypeLocal() {
-    if (!localStorage.getItem('user_upd')) {
-      const updates = [];
-      for (let direction in this.updates) {
-        for (let groupe in this.updates[direction].groups) {
-          for (let upd in this.updates[direction].groups[groupe].updates) {
-            updates.push([direction, groupe, upd, this.updates[direction].groups[groupe].updates[upd].lvl_const]);
-          }
-        }
-      }
-      localStorage.setItem('user_upd', JSON.stringify(updates));
-    }
-    const updates = JSON.parse(localStorage.getItem('user_upd'));
-    updates.forEach(
-      ([direction, groupe, upd, lvl]) => (this._updates.value[direction].groups[groupe].updates[upd].lvl_const = lvl),
-    );
-  }
-
-  prototypeLocalSet(direction, groupe, upd, coef) {
-    let updates = JSON.parse(localStorage.getItem('user_upd'));
-    updates.forEach(([d, g, u], i) => {
-      if (d === direction && g === groupe && u === upd) updates[i][3] += coef;
-    });
-    localStorage.setItem('user_upd', JSON.stringify(updates));
-  }
-
-  resetUpdates = () => {
+  resetUpdates = (): void => {
     for (let keyDirection in this.updates) {
       for (let keyGroupe in this.updates[keyDirection].groups) {
         for (let keyUpdate in this.updates[keyDirection].groups[keyGroupe].updates) {
@@ -67,7 +39,7 @@ class Updates {
     }
   };
 
-  gameLvlupUpdate = (direction, groupe, upd, coef) => {
+  gameLvlupUpdate = (direction: string, groupe: string, upd: string, coef: number): void => {
     const update = this.updates[direction].groups[groupe].updates[upd];
     if (update.lvl + update.lvl_const >= update.lvl_max) return;
 
@@ -82,7 +54,7 @@ class Updates {
     this.gameCorrectUpdate(direction, groupe, upd, update, coef);
   };
 
-  gameCorrectUpdate = (direction, groupe, upd, update, coef = 1) => {
+  gameCorrectUpdate = (direction: string, groupe: string, upd: string, update: IUpdate, coef: number = 1): void => {
     //** Отмена избранного при максимальной прокачке **//
     if (update.lvl_const === update.lvl_max) this.getFavorite(direction, groupe, upd);
     // * Улучшение жизней башни
@@ -91,7 +63,7 @@ class Updates {
     if (direction === 'perimeter' && groupe === 'balls' && upd === 'number') Balls.newBall(coef);
   };
 
-  constLvlupUpdate = (direction, groupe, upd, coef) => {
+  constLvlupUpdate = (direction: string, groupe: string, upd: string, coef: number): void => {
     const update = this.updates[direction].groups[groupe].updates[upd];
     if (update.lvl + update.lvl_const >= update.lvl_max) return;
 
@@ -100,19 +72,18 @@ class Updates {
 
     User.updateCoins(-price);
     this.updates[direction].groups[groupe].updates[upd].lvl_const += coef;
-    this.prototypeLocalSet(direction, groupe, upd, coef);
 
     //** Отмена избранного при максимальной прокачке **//
     if (update.lvl_const === update.lvl_max) this.getFavorite(direction, groupe, upd);
   };
 
-  getFavorite = (direction, groupe, upd) => {
+  getFavorite = (direction: string, groupe: string, upd: string): void => {
     const update = this.updates[direction].groups[groupe].updates[upd];
     update.favorite = !update.favorite;
   };
 
-  upFreeAttack = () => {
-    let updates = [];
+  upFreeAttack = (): void => {
+    let updates: Array<[string, string, IUpdate]> = [];
     for (let groupe in this.updates.attack.groups) {
       for (let upd in this.updates.attack.groups[groupe].updates) {
         const update = this.updates.attack.groups[groupe].updates[upd];
@@ -129,8 +100,8 @@ class Updates {
     this.gameCorrectUpdate('attack', freeUpd[0], freeUpd[1], freeUpd[2]);
   };
 
-  upFreeDefence = () => {
-    let updates = [];
+  upFreeDefence = (): void => {
+    let updates: Array<[string, string, IUpdate]> = [];
     for (let groupe in this.updates.defence.groups) {
       for (let upd in this.updates.defence.groups[groupe].updates) {
         const update = this.updates.defence.groups[groupe].updates[upd];
@@ -147,8 +118,8 @@ class Updates {
     this.gameCorrectUpdate('defence', freeUpd[0], freeUpd[1], freeUpd[2]);
   };
 
-  upFreePerimeter = () => {
-    let updates = [];
+  upFreePerimeter = (): void => {
+    let updates: Array<[string, string, IUpdate]> = [];
     for (let groupe in this.updates.perimeter.groups) {
       for (let upd in this.updates.perimeter.groups[groupe].updates) {
         const update = this.updates.perimeter.groups[groupe].updates[upd];
@@ -165,8 +136,8 @@ class Updates {
     this.gameCorrectUpdate('perimeter', freeUpd[0], freeUpd[1], freeUpd[2]);
   };
 
-  upFreeMoney = () => {
-    let updates = [];
+  upFreeMoney = (): void => {
+    let updates: Array<[string, string, IUpdate]> = [];
     for (let groupe in this.updates.money.groups) {
       for (let upd in this.updates.money.groups[groupe].updates) {
         const update = this.updates.money.groups[groupe].updates[upd];
@@ -184,14 +155,14 @@ class Updates {
   };
 }
 
-function getCoefPrice(update, coef) {
+function getCoefPrice(update: IUpdate, coef: number): number {
   let price = 0;
   for (let inc = 0; inc < coef; inc++) {
     price += update.getPrice(inc);
   }
   return price;
 }
-function getCoefPriceConst(update, coef) {
+function getCoefPriceConst(update: IUpdate, coef: number): number {
   let price = 0;
   for (let inc = 0; inc < coef; inc++) {
     price += update.getPriceConst(inc);
