@@ -1,14 +1,26 @@
 <template>
   <div class="game__playzone">
-    <!-- <div class="game__playzone-option shadow-h-orange"><GTower /></div> -->
+    <div class="game__playzone-option shadow-h-orange" v-if="options[0] !== ''">
+      <PanelPlayzoneOptions :options="options[0]" />
+    </div>
     <div class="game__playzone-center frame-blue shadow-h-blue"></div>
-    <!-- <div class="game__playzone-option shadow-h-turq"><GEnemies /></div> -->
+    <div class="game__playzone-option shadow-h-turq" v-if="options[1] !== ''">
+      <PanelPlayzoneOptions :options="options[1]" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
   // import GTower from '@/components/Options/GTower.vue';
   // import GEnemies from '@/components/Options/GEnemies.vue';
+
+  import { TOptionalGame } from '@/types/optional';
+  import PanelPlayzoneOptions from '@/components/Game/Panel/PanelPlayzoneOptions.vue';
+
+  interface Props {
+    options: TOptionalGame;
+  }
+  defineProps<Props>();
 </script>
 
 <style lang="scss">

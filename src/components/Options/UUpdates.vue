@@ -3,7 +3,7 @@
     <h1 class="bg-orange">Улучшения</h1>
     <div class="updates">
       <UUpdatesCoef @setTab="(e) => setTab(e)" />
-      <div class="updates__section">
+      <div class="updates__section" :style="{ height: heightSection }">
         <UUpdatesTabs @setTab="(e) => setTab(e)" />
         <UUpdatesBody :mode="mode" :tab="tab" />
       </div>
@@ -13,16 +13,17 @@
 
 <script setup lang="ts">
   import UUpdatesCoef from '@/components/Options/UUpdatesCoef.vue';
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import UUpdatesTabs from './UUpdatesTabs.vue';
   import UUpdatesBody from './UUpdatesBody.vue';
 
   interface Props {
     mode?: string;
   }
-  withDefaults(defineProps<Props>(), { mode: 'Меню' });
+  const props = withDefaults(defineProps<Props>(), { mode: 'Меню' });
 
   const tab = ref('attack');
+  const heightSection = computed(() => (props.mode === 'Меню' ? '85dvh' : '72dvh'));
 
   function setTab(tabName: string | number) {
     if (typeof tabName === 'string') tab.value = tabName;
@@ -42,7 +43,6 @@
     &__section {
       display: flex;
       flex: 1;
-      height: 85dvh;
     }
   }
 </style>

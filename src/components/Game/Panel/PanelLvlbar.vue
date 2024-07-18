@@ -1,5 +1,5 @@
 <template>
-  <div class="game__lvlbar">
+  <div class="game__lvlbar" @click="emit('setOptions', 'Player')">
     <div class="game__lvlbar-bar flex-center" :style="lvlbarBar">{{ lvlbarText }}</div>
   </div>
 </template>
@@ -8,6 +8,11 @@
   import User from '@/logic/user';
   import { computed } from 'vue';
   import { MyMath } from '@/math/math';
+  import { TOptionalPanelGame } from '@/types/optional';
+
+  const emit = defineEmits<{
+    setOptions: [value: TOptionalPanelGame];
+  }>();
 
   const lvlbarText = computed(() => {
     return `${User.username}, уровень ${User.lvl.value.lvl} (${User.lvl.value.exp_lvl} / ${User.lvl.value.exp_next} — ${MyMath.toText(User.lvl.value.percent)}%)`;
@@ -28,6 +33,7 @@
     height: 4dvh;
     padding: 1dvh 1.5dvh;
     background: $col-black;
+    cursor: pointer;
     &-bar {
       height: 100%;
       font-size: 0.8rem;

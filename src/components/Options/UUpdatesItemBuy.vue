@@ -52,6 +52,7 @@
   .item {
     &__buy {
       flex: 1;
+      font-size: 1.2rem;
     }
     &__count {
       height: 50%;
