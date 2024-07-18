@@ -22,7 +22,7 @@ class Particles {
       const initTowerParticle = [
         Settings.sceneWidth / 2,
         Settings.sceneHeight / 2,
-        Settings.gameInit,
+        Settings.waveInit,
         this.piecesFactory.getTowerPieces,
       ];
       this.particles.value.push(new ParticleFactory(name, ...initTowerParticle));
@@ -50,7 +50,7 @@ class Particles {
         });
       } else {
         particle.p.forEach((p) => {
-          const coefDistance = (dt / Settings.gameInit) * 5;
+          const coefDistance = (dt / Settings.waveInit) * 5;
           p.x -= (p.x - 50) * coefDistance;
           p.y -= (p.y - 50) * coefDistance;
         });

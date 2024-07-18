@@ -30,7 +30,7 @@ class Waves {
   init() {
     this.lvl = Settings.lvl.value;
     this.wave.value = 0;
-    this.inite.value = Settings.gameInit;
+    this.inite.value = Settings.waveInit;
     this.long.value = Settings.waveLong;
     this.delay.value = Settings.waveDelay;
 

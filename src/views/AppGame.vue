@@ -1,6 +1,18 @@
 <template>
   <div class="app-game">
-    <div class="game__base"></div>
+    <div class="game__base">
+      <EntitiesPerimeter />
+      <EntitiesWall />
+      <EntitiesMine />
+      <EntitiesBall />
+      <EntitiesBullet />
+      <EntitiesSlug />
+      <EntitiesTower />
+      <EntitiesEnemy />
+      <EntitiesPack />
+      <EntitiesParticles v-for="particle in Particles.particles.value" :key="particle.id" :particle="particle" />
+      <EntitiesDiscard />
+    </div>
     <div class="game__panel">
       <PanelValuta />
       <PanelLvlbar />
@@ -11,11 +23,24 @@
 </template>
 
 <script setup lang="ts">
+  import EntitiesPerimeter from '@/components/Game/Entities/EntitiesPerimeter.vue';
+  import EntitiesWall from '@/components/Game/Entities/EntitiesWall.vue';
+  import EntitiesMine from '@/components/Game/Entities/EntitiesMine.vue';
+  import EntitiesBall from '@/components/Game/Entities/EntitiesBall.vue';
+  import EntitiesBullet from '@/components/Game/Entities/EntitiesBullet.vue';
+  import EntitiesSlug from '@/components/Game/Entities/EntitiesSlug.vue';
+  import EntitiesTower from '@/components/Game/Entities/EntitiesTower.vue';
+  import EntitiesEnemy from '@/components/Game/Entities/EntitiesEnemy.vue';
+  import EntitiesPack from '@/components/Game/Entities/EntitiesPack.vue';
+  import EntitiesParticles from '@/components/Game/Entities/EntitiesParticles.vue';
+  import EntitiesDiscard from '@/components/Game/Entities/EntitiesDiscard.vue';
+
   import PanelValuta from '@/components/Game/Panel/PanelValuta.vue';
   import PanelLvlbar from '@/components/Game/Panel/PanelLvlbar.vue';
   import PanelPlayzone from '@/components/Game/Panel/PanelPlayzone.vue';
   import PanelOptions from '@/components/Game/Panel/PanelOptions.vue';
 
+  import Particles from '@/entities/particles';
   import Settings from '@/logic/settings';
   import Game from '@/logic/game';
   import Updates from '@/mechanics/updates';
@@ -66,13 +91,13 @@
   .game {
     &__base {
       position: absolute;
-      width: 100%;
-      height: 100%;
-
-      // background: red;
+      width: 100vw;
+      height: 100dvh;
+      overflow: hidden;
     }
     &__panel {
-      position: relative;
+      position: absolute;
+      z-index: 98;
     }
   }
 </style>
