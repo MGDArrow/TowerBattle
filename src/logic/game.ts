@@ -14,16 +14,20 @@ import Messages from '@/services/message';
 import Statistic from '@/services/statistic';
 import Settings from '@/logic/settings';
 import Updates from '@/mechanics/updates';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 
 class Game {
-  static #onlyInstance = null;
+  static #onlyInstance: Game | null = null;
+
+  public id: string = '';
+  public fpsMetter: ReturnType<typeof setInterval> | undefined;
+
   constructor() {
     if (Game.#onlyInstance) return Game.#onlyInstance;
     Game.#onlyInstance = this;
   }
 
-  initGame = () => {
+  initGame = (): void => {
     this.id = Date.now().toString(36) + Math.random().toString(36).substr(2);
 
     Settings.newGame();
@@ -33,14 +37,14 @@ class Game {
 
     const fps_temp = ref(0);
     const sceneTimer = getSceneTimer(this.repeatFunction, fps_temp);
-    this.fpsMetter = setInterval(() => {
+    this.fpsMetter = setInterval((): void => {
       Settings.fps_now.value = fps_temp.value;
       fps_temp.value = 0;
     }, 1000);
     sceneTimer();
   };
 
-  initEntities = () => {
+  initEntities = (): void => {
     Statistic.init();
     Messages.init();
     Particles.init();
@@ -59,7 +63,7 @@ class Game {
     Mines.init();
   };
 
-  repeatFunction = (dt) => {
+  repeatFunction = (dt: number): void => {
     //**! Шаг игры !**//
     Wave.tick(dt);
     Wave.spawnEnemies();
@@ -90,11 +94,11 @@ class Game {
   };
 }
 
-function getSceneTimer(repeatFunction, fps_temp) {
+function getSceneTimer(repeatFunction: (dt: number) => void, fps_temp: Ref<number>) {
   let startTime = 0;
-  function sceneTimer(timeStamp = 0) {
+  function sceneTimer(timeStamp = 0): void {
     let deltaTime = Math.ceil(timeStamp - startTime);
-    const interval = Math.floor(1000 / Settings.fps);
+    const interval = Math.floor(1000 / Settings.fps.value);
     if (deltaTime >= 1000) deltaTime = interval;
 
     if (deltaTime >= interval) {

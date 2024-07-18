@@ -15,6 +15,47 @@
   import PanelLvlbar from '@/components/Game/Panel/PanelLvlbar.vue';
   import PanelPlayzone from '@/components/Game/Panel/PanelPlayzone.vue';
   import PanelOptions from '@/components/Game/Panel/PanelOptions.vue';
+
+  import Settings from '@/logic/settings';
+  import Game from '@/logic/game';
+  import Updates from '@/mechanics/updates';
+
+  import { onBeforeMount, onUnmounted } from 'vue';
+
+  // const info = ref(false);
+  // const description = ref(false);
+  // const popup = ref(false);
+  // const go = computed(() => Settings.gameOver.value);
+  const game = Game;
+
+  onBeforeMount(() => {
+    game.initGame();
+    document.addEventListener('visibilitychange', pauseDocumentHidden);
+  });
+
+  onUnmounted(() => {
+    gameOver();
+    Updates.resetUpdates();
+    clearInterval(game.fpsMetter);
+    document.removeEventListener('visibilitychange', pauseDocumentHidden);
+  });
+
+  function pauseDocumentHidden() {
+    if (document.hidden && Settings.game_spead.value !== 0) {
+      Settings.gameSpeadPause();
+    }
+  }
+
+  function gameOver() {
+    Settings.endGame();
+  }
+
+  // function repeatGame() {
+  //   popup.value = false;
+  //   Settings.gameOver.value = false;
+  //   clearInterval(game.fpsMetter);
+  //   game.initGame();
+  // }
 </script>
 
 <style lang="scss">
