@@ -7,7 +7,7 @@ import { MyMath } from '@/math/math';
 import Messages from '@/services/message';
 import Statistic from '@/services/statistic';
 import Settings from '@/logic/settings';
-import User from '@/logic/settings';
+import User from '@/logic/user';
 import { ref } from 'vue';
 
 class Waves {

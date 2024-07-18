@@ -8,10 +8,17 @@
       <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center"><VIcon :name="'lab'" /></div>
     </div>
     <div class="game__options-block flex-center">
-      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center"><VIcon :name="'play'" /></div>
-      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center"><VIcon :name="'minus'" /></div>
-      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center">x5</div>
-      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center"><VIcon :name="'plus'" /></div>
+      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center" @click="Settings.gameSpeadPause()">
+        <VIcon v-if="isPause" :name="'pause'" />
+        <VIcon v-else :name="'play'" />
+      </div>
+      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center" @click="Settings.gameSpeadMinus()">
+        <VIcon :name="'minus'" />
+      </div>
+      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center">x{{ Settings.game_spead.value }}</div>
+      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center" @click="Settings.gameSpeadPlus()">
+        <VIcon :name="'plus'" />
+      </div>
       <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center"><VIcon :name="'gear'" /></div>
     </div>
     <div class="game__options-block flex-center">
@@ -24,7 +31,19 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  import Settings from '@/logic/settings';
+  import { computed, onMounted } from 'vue';
+
+  const isPause = computed(() => Settings.game_spead.value > 0);
+
+  onMounted(() => {
+    document.onkeydown = function (evt) {
+      evt = evt || window.event;
+      if (evt.keyCode == 27) Settings.gameSpeadPause();
+    };
+  });
+</script>
 
 <style lang="scss">
   .game__options {
