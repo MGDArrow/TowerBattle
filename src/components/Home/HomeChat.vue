@@ -8,7 +8,7 @@
         <div class="home-chat__to bg-purple shadow-h-purple" v-if="to !== ''" @click="to = ''">@{{ to }}</div>
         <VInput
           class="bg-bg border-purple shadow-h-purple"
-          v-model="message"
+          v-model.trim="message"
           :placeholder="'Введите сообщение'"
           ref="chatInput"
         />
@@ -38,6 +38,7 @@
   }
 
   function sendMessage(): void {
+    if (message.value === '') return;
     Chat.sendMessage(message.value, to.value);
     message.value = '';
     to.value = '';
