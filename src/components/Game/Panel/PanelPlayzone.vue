@@ -1,12 +1,15 @@
 <template>
   <div class="game__playzone">
-    <div class="game__playzone-option frame-orange shadow-h-orange"></div>
+    <!-- <div class="game__playzone-option shadow-h-orange"><GTower /></div> -->
     <div class="game__playzone-center frame-blue shadow-h-blue"></div>
-    <div class="game__playzone-option frame-turq shadow-h-turq"></div>
+    <!-- <div class="game__playzone-option shadow-h-turq"><GEnemies /></div> -->
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+  // import GTower from '@/components/Options/GTower.vue';
+  // import GEnemies from '@/components/Options/GEnemies.vue';
+</script>
 
 <style lang="scss">
   .game__playzone {
