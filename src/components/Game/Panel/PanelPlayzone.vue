@@ -11,9 +11,6 @@
 </template>
 
 <script setup lang="ts">
-  // import GTower from '@/components/Options/GTower.vue';
-  // import GEnemies from '@/components/Options/GEnemies.vue';
-
   import { TOptionalGame } from '@/types/optional';
   import PanelPlayzoneOptions from '@/components/Game/Panel/PanelPlayzoneOptions.vue';
 
@@ -26,12 +23,12 @@
 <style lang="scss">
   .game__playzone {
     position: absolute;
-    top: 9dvh;
+    top: 7.5dvh;
     left: 0;
     display: flex;
     gap: 1dvh;
     width: 100vw;
-    height: 86dvh;
+    height: 88.5dvh;
     padding: 0.5dvh 1dvh;
     & > div {
       outline: 1dvh solid $col-black;

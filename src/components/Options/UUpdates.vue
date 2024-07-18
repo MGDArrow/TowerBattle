@@ -23,7 +23,7 @@
   const props = withDefaults(defineProps<Props>(), { mode: 'Меню' });
 
   const tab = ref('attack');
-  const heightSection = computed(() => (props.mode === 'Меню' ? '85dvh' : '72dvh'));
+  const heightSection = computed(() => (props.mode === 'Меню' ? '85dvh' : '74.5dvh'));
 
   function setTab(tabName: string | number) {
     if (typeof tabName === 'string') tab.value = tabName;

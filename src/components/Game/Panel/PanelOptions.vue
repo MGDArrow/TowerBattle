@@ -42,11 +42,11 @@
         <VIcon v-if="isPause" :name="'pause'" />
         <VIcon v-else :name="'play'" />
       </div>
-      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center" @click="Settings.gameSpeadMinus()">
+      <div class="bg-grey border-blue bg-h-blue shadow-h-blue flex-center" @click="Settings.gameSpeadMinus()">
         <VIcon :name="'minus'" />
       </div>
-      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center">x{{ Settings.game_spead.value }}</div>
-      <div class="bg-bg border-blue bg-h-blue shadow-h-blue flex-center" @click="Settings.gameSpeadPlus()">
+      <div class="bg-grey border-blue bg-h-blue shadow-h-blue flex-center">x{{ Settings.game_spead.value }}</div>
+      <div class="bg-grey border-blue bg-h-blue shadow-h-blue flex-center" @click="Settings.gameSpeadPlus()">
         <VIcon :name="'plus'" />
       </div>
       <div
@@ -130,12 +130,12 @@
 <style lang="scss">
   .game__options {
     position: absolute;
-    top: 95dvh;
+    top: 96dvh;
     left: 0;
     display: flex;
     gap: 1dvh;
     width: 100vw;
-    height: 5dvh;
+    height: 4dvh;
     padding: 0.5dvh 1dvh;
     background: $col-black;
     &-block {
@@ -150,7 +150,7 @@
       }
 
       gap: 1dvh;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       & > div {
         flex: 1;
         height: 100%;

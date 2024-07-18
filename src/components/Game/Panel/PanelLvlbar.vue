@@ -27,16 +27,16 @@
 <style lang="scss">
   .game__lvlbar {
     position: absolute;
-    top: 5dvh;
+    top: 4dvh;
     left: 0;
     width: 100vw;
-    height: 4dvh;
+    height: 3.5dvh;
     padding: 1dvh 1.5dvh;
     background: $col-black;
     cursor: pointer;
     &-bar {
       height: 100%;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       outline: 0.4dvh solid $col-green;
       outline-offset: 0.4dvh;
     }

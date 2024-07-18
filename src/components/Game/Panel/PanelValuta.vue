@@ -39,12 +39,12 @@
     display: flex;
     gap: 1dvh;
     width: 100vw;
-    height: 5dvh;
+    height: 4dvh;
     padding: 0.5dvh 1dvh;
     background: $col-black;
     & > div {
       flex: 1;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       & > svg {
         margin-left: 1dvh;
       }
