@@ -1,5 +1,5 @@
 import { MyMath } from '@/math/math';
-import { computed, ref } from 'vue';
+import { computed, Ref, ref } from 'vue';
 
 export default class Statistic {
   static statistic = ref({});
@@ -62,7 +62,12 @@ export default class Statistic {
 }
 
 class StatisticBuilder {
-  constructor(groupe, description, color = 'green', icon = false) {
+  private _count: Ref<number>;
+  public groupe: string;
+  public description: string;
+  public color: string;
+  public icon: string | boolean;
+  constructor(groupe: string, description: string, color = 'green', icon = false) {
     this._count = ref(0);
     this.description = description;
     this.groupe = groupe;
@@ -70,15 +75,15 @@ class StatisticBuilder {
     this.icon = icon;
   }
 
-  add = (inc) => {
+  add = (inc: number) => {
     this.count = inc;
   };
 
-  get count() {
+  get count(): string {
     return MyMath.toText(this._count);
   }
 
-  set count(inc) {
+  set count(inc: number) {
     this._count.value += inc;
   }
 }

@@ -11,19 +11,22 @@ import Messages from '@/services/message';
 import Statistic from '@/services/statistic';
 import Settings from '@/logic/settings';
 import User from '@/logic/user';
-import { ref } from 'vue';
+import { Ref, ref, toValue } from 'vue';
+import { IEnemiesParams, IEnemyParams } from '@/types/enemies';
 
+export type TEnemiesClasses = Common | Quick | Tank | Shooter | Boss;
 class FactoryEnemy {
-  newEnemy(enemiesParams, type) {
+  newEnemy(enemiesParams: IEnemiesParams, type: string) {
     if (type === 'random') {
       return this.getRandomEnemy(enemiesParams);
     }
     if (type === 'boss') {
       return new Boss(enemiesParams.boss);
     }
+    return new Boss(enemiesParams.boss);
   }
 
-  getRandomEnemy(enemiesParams) {
+  getRandomEnemy(enemiesParams: IEnemiesParams) {
     let typeEnemy = Math.random();
 
     if (typeEnemy < enemiesParams.common.percent) return new Common(enemiesParams.common);
@@ -39,7 +42,34 @@ class FactoryEnemy {
 }
 
 class BaseEnemy {
-  constructor(enemiesParams) {
+  public name: string = 'BaseEnemy';
+  public id: string;
+
+  public size: number;
+  public r: number;
+  public x: Ref<number>;
+  public y: Ref<number>;
+  public rotate: Ref<number>;
+  public distance: Ref<number>;
+  public distance_wall: Ref<number>;
+  public target: string;
+
+  public coefX: number = 0;
+  public coefY: number = 0;
+
+  public u_spikes: number;
+  public u_balls: number;
+
+  public s_hp: Ref<number>;
+  public s_hp_max: Ref<number>;
+  public s_cooldown: number;
+  public s_damage: number;
+  public s_spead: number;
+  public s_heft: number;
+  public s_awardDollars: number;
+  public s_awardCoins: number;
+  public s_awardExp: number;
+  constructor(enemiesParams: IEnemyParams) {
     this.id = MyMath.randomID();
 
     this.size = enemiesParams.size * Settings.scaleSize;
@@ -65,22 +95,22 @@ class BaseEnemy {
     this.s_awardExp = enemiesParams.awardExp;
   }
 
-  getDistanceToTower() {
-    this.distance = Vector.getVectorLength(this.x, this.y, Tower.x, Tower.y) - this.r - Tower.r;
-  }
+  getDistanceToTower = () => {
+    this.distance.value = Vector.getVectorLength(this.x.value, this.y.value, Tower.x, Tower.y) - this.r - Tower.r;
+  };
 
-  getDiscard(heftDiscard, speadDiscard) {
+  getDiscard = (heftDiscard: number, speadDiscard: number) => {
     let discardCoef = heftDiscard / this.s_heft;
     const discardPower = discardCoef * speadDiscard;
-    this.x -= this.coefX * discardPower;
-    this.y -= this.coefY * discardPower;
+    this.x.value -= this.coefX * discardPower;
+    this.y.value -= this.coefY * discardPower;
     this.getDistanceToTower();
-  }
+  };
 
-  getDamage(damage) {
-    this.s_hp -= damage;
+  getDamage = (damage: number) => {
+    this.s_hp.value -= damage;
     Statistic.inc('damage_post', damage);
-  }
+  };
 
   death() {
     //** Обновляем валюты **//
@@ -98,8 +128,8 @@ class BaseEnemy {
     Messages.add(`+${MyMath.toText(addExp, 3)}`, 'turq', 'exp');
 
     //** Вызываем партиклы на месте смерти **//
-    Particles.newParticles(this.name, this.x, this.y);
-    if (this.distance > 0) Mines.newMine(this.x, this.y);
+    Particles.newParticles(this.name, toValue(this.x), toValue(this.y));
+    if (toValue(this.distance) > 0) Mines.newMine(toValue(this.x), toValue(this.y));
 
     //** Обновляем статистику **//
     Statistic.inc('dollars_enemies', addDollars);
@@ -110,23 +140,23 @@ class BaseEnemy {
 }
 
 class NearEnemy extends BaseEnemy {
-  constructor(enemiesParams) {
+  constructor(enemiesParams: IEnemyParams) {
     super(enemiesParams);
   }
 
-  getMoveDirection() {
-    [this.coefX, this.coefY] = Vector.getVectorNormalize(this.x, this.y, Tower.x, Tower.y);
-  }
+  getMoveDirection = () => {
+    [this.coefX, this.coefY] = Vector.getVectorNormalize(this.x.value, this.y.value, Tower.x, Tower.y);
+  };
 
-  getDistanceToWall() {
-    this.distance_wall = Vector.getVectorLength(this.x, this.y, Wall.x, Wall.y) - this.r - Wall.r;
-  }
+  getDistanceToWall = () => {
+    this.distance_wall.value = Vector.getVectorLength(this.x.value, this.y.value, Wall.x, Wall.y) - this.r - Wall.r;
+  };
 
-  move() {
+  move = () => {
     this.getMoveDirection();
 
-    const newX = this.x + this.coefX * this.s_spead;
-    const newY = this.y + this.coefY * this.s_spead;
+    const newX = this.x.value + this.coefX * this.s_spead;
+    const newY = this.y.value + this.coefY * this.s_spead;
 
     const isWall = Wall.status.value === 'ready';
     let isCollision, ABx, ABy;
@@ -142,43 +172,43 @@ class NearEnemy extends BaseEnemy {
     }
 
     if (!isCollision) {
-      this.x = newX;
-      this.y = newY;
-      this.rotate = 0;
+      this.x.value = newX;
+      this.y.value = newY;
+      this.rotate.value = 0;
       this.getDistanceToTower();
       return;
     }
 
     if (isWall) return this.collisionWithWall(newX, newY, ABx, ABy);
     this.collisionWithTower(newX, newY, ABx, ABy);
-  }
+  };
 
-  collisionWithTower(newX, newY, ABx, ABy) {
+  collisionWithTower = (newX: number, newY: number, ABx: number, ABy: number) => {
     const ABd = Vector.getLength(ABx, ABy);
     const [Cx, Cy] = Vector.getNormalize(ABx, ABy, ABd);
     const deepCollision = this.r + Tower.r - ABd;
-    this.x = newX - Cx * deepCollision;
-    this.y = newY - Cy * deepCollision;
-    this.rotate = Rotate.rotatePrecise(ABx, ABy, ABd);
+    this.x.value = newX - Cx * deepCollision;
+    this.y.value = newY - Cy * deepCollision;
+    this.rotate.value = Rotate.rotatePrecise(ABx, ABy, ABd);
     Tower.counterattackSpikes(this);
     this.getDistanceToTower();
-  }
+  };
 
-  collisionWithWall(newX, newY, ABx, ABy) {
+  collisionWithWall = (newX: number, newY: number, ABx: number, ABy: number) => {
     const ABd = Vector.getLength(ABx, ABy);
     const [Cx, Cy] = Vector.getNormalize(ABx, ABy, ABd);
     const deepCollision = this.r + Wall.r - ABd;
-    this.x = newX - Cx * deepCollision;
-    this.y = newY - Cy * deepCollision;
-    this.rotate = Rotate.rotatePrecise(ABx, ABy, ABd);
-  }
+    this.x.value = newX - Cx * deepCollision;
+    this.y.value = newY - Cy * deepCollision;
+    this.rotate.value = Rotate.rotatePrecise(ABx, ABy, ABd);
+  };
 
-  attack(dt) {
+  attack = (dt: number) => {
     if (this.s_cooldown > 0) this.s_cooldown -= dt;
     if (this.s_cooldown > 0) return;
 
     if (this.target === 'Tower') {
-      if (this.distance > 0) return;
+      if (this.distance.value > 0) return;
       this.s_cooldown = CONST.ENEMY.COOLDOWN;
       Tower.getDamage(this.s_damage);
       return;
@@ -186,36 +216,36 @@ class NearEnemy extends BaseEnemy {
 
     if (this.target === 'Wall') {
       this.getDistanceToWall();
-      if (this.distance_wall > 0) return;
+      if (this.distance_wall.value > 0) return;
       this.s_cooldown = CONST.ENEMY.COOLDOWN;
       Wall.getDamage(this.s_damage);
     }
-  }
+  };
 }
 
 class FarEnemy extends BaseEnemy {
-  constructor(enemiesParams) {
+  constructor(enemiesParams: IEnemyParams) {
     super(enemiesParams);
   }
 
-  move() {
+  move = () => {
     this.getMoveDirection();
-    if (this.distance <= Tower.r * 5) return;
-    this.x += this.coefX * this.s_spead;
-    this.y += this.coefY * this.s_spead;
-  }
+    if (this.distance.value <= Tower.r * 5) return;
+    this.x.value += this.coefX * this.s_spead;
+    this.y.value += this.coefY * this.s_spead;
+  };
 
-  getMoveDirection() {
-    const [ETx, ETy] = Vector.getVector(this.x, this.y, Tower.x, Tower.y);
+  getMoveDirection = () => {
+    const [ETx, ETy] = Vector.getVector(this.x.value, this.y.value, Tower.x, Tower.y);
     const distance = Vector.getLength(ETx, ETy);
     [this.coefX, this.coefY] = Vector.getNormalize(ETx, ETy, distance);
-    this.distance = distance - this.r - Tower.r;
-    this.rotate = Rotate.rotate(ETx, ETy, distance);
-  }
+    this.distance.value = distance - this.r - Tower.r;
+    this.rotate.value = Rotate.rotate(ETx, ETy, distance);
+  };
 }
 
 class Common extends NearEnemy {
-  constructor(enemiesParams) {
+  constructor(enemiesParams: IEnemyParams) {
     super(enemiesParams);
     this.name = 'Обычный';
   }
@@ -227,7 +257,7 @@ class Common extends NearEnemy {
 }
 
 class Quick extends NearEnemy {
-  constructor(enemiesParams) {
+  constructor(enemiesParams: IEnemyParams) {
     super(enemiesParams);
     this.name = 'Быстрый';
   }
@@ -239,7 +269,7 @@ class Quick extends NearEnemy {
 }
 
 class Tank extends NearEnemy {
-  constructor(enemiesParams) {
+  constructor(enemiesParams: IEnemyParams) {
     super(enemiesParams);
     this.name = 'Танк';
   }
@@ -251,19 +281,19 @@ class Tank extends NearEnemy {
 }
 
 class Shooter extends FarEnemy {
-  constructor(enemiesParams) {
+  constructor(enemiesParams: IEnemyParams) {
     super(enemiesParams);
     this.name = 'Стрелок';
   }
 
-  attack(dt) {
+  attack = (dt: number) => {
     if (this.s_cooldown > 0) this.s_cooldown -= dt;
     if (this.s_cooldown > 0) return;
     this.getDistanceToTower();
-    if (this.distance > Tower.r * 5) return;
+    if (this.distance.value > Tower.r * 5) return;
     this.s_cooldown = CONST.ENEMY.COOLDOWN;
     Sluges.newSlug(this);
-  }
+  };
 
   death() {
     super.death();
@@ -272,7 +302,7 @@ class Shooter extends FarEnemy {
 }
 
 class Boss extends NearEnemy {
-  constructor(enemiesParams) {
+  constructor(enemiesParams: IEnemyParams) {
     super(enemiesParams);
     this.name = 'Босс';
   }
@@ -284,23 +314,23 @@ class Boss extends NearEnemy {
 }
 
 class Enemies {
-  static #onlyInstance = null;
+  static #onlyInstance: Enemies | null = null;
+  public enemies: Ref<Array<TEnemiesClasses>> = ref([]);
+  public factory = new FactoryEnemy();
   constructor() {
     if (Enemies.#onlyInstance) return Enemies.#onlyInstance;
     Enemies.#onlyInstance = this;
-    this.enemies = ref([]);
   }
 
   init() {
     this.enemies.value = [];
-    this.factory = new FactoryEnemy();
   }
 
-  newEnemy(enemiesParams, type) {
+  newEnemy(enemiesParams: IEnemiesParams, type: string) {
     this.enemies.value.push(this.factory.newEnemy(enemiesParams, type));
   }
 
-  getEnemiesParams(gameLvl, waveCount) {
+  getEnemiesParams(gameLvl: number, waveCount: number): IEnemiesParams {
     const hp = Math.floor(Math.pow(waveCount, 1.9 + 0.1 * MyMath.round(waveCount / 100)));
     const damage = 1 + Math.floor(Math.pow(waveCount, 1.5 + 0.1 * MyMath.round(waveCount / 150)));
     const spead = MyMath.round(CONST.ENEMY.SPEAD.BASE + 0.1 * (waveCount / 70));
@@ -367,7 +397,7 @@ class Enemies {
     };
   }
 
-  move(dt) {
+  move(dt: number) {
     this.enemies.value.forEach((enemy) => {
       if (enemy.u_spikes > 0) enemy.u_spikes -= dt;
       if (enemy.u_balls > 0) enemy.u_balls -= dt;
@@ -376,17 +406,21 @@ class Enemies {
     });
   }
 
-  enemiesCollision(enemy) {
+  enemiesCollision(enemy: TEnemiesClasses) {
     // * Формируем дерево квадрантов
     let quadtree = new Map();
     this.enemies.value.forEach((enemy) => {
-      const key = Math.floor(enemy.x / CONST.ENEMY.SIZE.TANK) + '_' + Math.floor(enemy.y / CONST.ENEMY.SIZE.TANK);
+      const key =
+        Math.floor(toValue(enemy.x) / CONST.ENEMY.SIZE.TANK) +
+        '_' +
+        Math.floor(toValue(enemy.y) / CONST.ENEMY.SIZE.TANK);
       if (!quadtree.has(key)) quadtree.set(key, []);
       quadtree.set(key, [...quadtree.get(key), enemy]);
     });
-    let quadEnemies = [];
+    let quadEnemies: Array<TEnemiesClasses> = [];
     // * Получаем текущий квадрант
-    const key = Math.floor(enemy.x / CONST.ENEMY.SIZE.TANK) + '_' + Math.floor(enemy.y / CONST.ENEMY.SIZE.TANK);
+    const key =
+      Math.floor(toValue(enemy.x) / CONST.ENEMY.SIZE.TANK) + '_' + Math.floor(toValue(enemy.y) / CONST.ENEMY.SIZE.TANK);
     // * Получаем соседние квадранты
     const [quadW, quadH] = key.split('_');
     for (let w = -1; w <= 1; w++) {
@@ -398,8 +432,9 @@ class Enemies {
     if (quadEnemies.length <= 1) return;
 
     quadEnemies.forEach((second) => {
+      // console.log();
       if (second.id === enemy.id) return;
-      const [ABx, ABy] = Vector.getVector(enemy.x, enemy.y, second.x, second.y);
+      const [ABx, ABy] = Vector.getVector(toValue(enemy.x), toValue(enemy.y), toValue(second.x), toValue(second.y));
       const isCollision = Vector.isCollision(ABx, ABy, enemy.r, second.r);
       if (!isCollision) return;
       const ABd = Vector.getLength(ABx, ABy);
@@ -420,13 +455,13 @@ class Enemies {
     });
   }
 
-  attack(dt) {
+  attack(dt: number) {
     this.enemies.value.forEach((enemy) => enemy.attack(dt));
   }
 
   death() {
     this.enemies.value = this.enemies.value.filter((enemy) => {
-      if (enemy.s_hp > 0) return true;
+      if (toValue(enemy.s_hp) > 0) return true;
       enemy.death();
       return false;
     });

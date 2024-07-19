@@ -8,23 +8,26 @@ import Messages from '@/services/message';
 import Statistic from '@/services/statistic';
 import Settings from '@/logic/settings';
 import User from '@/logic/user';
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
+import { IEnemiesParams } from '@/types/enemies';
 
 class Waves {
-  static #onlyInstance = null;
+  static #onlyInstance: Waves | null = null;
+  public wave = ref(0);
+  public inite = ref(0);
+  public long = ref(0);
+  public delay = ref(0);
+
+  public enemiesCount = ref(0);
+  public enemiesAll = ref(0);
+  public enemiesParams: Ref<IEnemiesParams | null> = ref(null);
+  public enemyBossPercent = ref(0);
+
+  public lvl = 1;
+  private enemiesInterval = 0;
   constructor() {
     if (Waves.#onlyInstance) return Waves.#onlyInstance;
     Waves.#onlyInstance = this;
-
-    this.wave = ref(0);
-    this.inite = ref(0);
-    this.long = ref(0);
-    this.delay = ref(0);
-
-    this.enemiesCount = ref(0);
-    this.enemiesAll = ref(0);
-    this.enemiesParams = ref({});
-    this.enemyBossPercent = ref(0);
   }
 
   init() {
@@ -36,7 +39,7 @@ class Waves {
 
     this.enemiesCount.value = 0;
     this.enemiesAll.value = 0;
-    this.enemiesParams.value = {};
+    this.enemiesParams.value = null;
     this.enemyBossPercent.value = 0;
     this.enemiesInterval = 0;
 
@@ -56,7 +59,7 @@ class Waves {
     this.enemyBossPercent.value = this.enemiesParams.value.boss.percent;
   };
 
-  tick = (dt) => {
+  tick = (dt: number) => {
     if (this.inite.value > 0) return (this.inite.value -= dt);
     Statistic.inc('game_time', dt);
     if (this.long.value > 0) return (this.long.value -= dt);
@@ -90,10 +93,10 @@ class Waves {
     if (this.enemiesInterval * this.enemiesCount.value <= this.long.value) return;
 
     this.enemiesCount.value -= 1;
-    Enemies.newEnemy(this.enemiesParams.value, 'random');
+    if (this.enemiesParams.value !== null) Enemies.newEnemy(this.enemiesParams.value, 'random');
 
     if (!this.enemyBossPercent.value) return;
-    Enemies.newEnemy(this.enemiesParams.value, 'boss');
+    if (this.enemiesParams.value !== null) Enemies.newEnemy(this.enemiesParams.value, 'boss');
     this.enemyBossPercent.value = 0;
   };
 

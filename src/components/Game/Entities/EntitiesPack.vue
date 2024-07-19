@@ -1,7 +1,7 @@
 <template>
   <div
     v-for="pack in Packs.packs.value"
-    :key="pack.id"
+    :key="pack.type"
     class="kit"
     :style="{
       top: `${pack.y}px`,
@@ -11,7 +11,7 @@
       transform: `translate(-50%, -50%) rotate(${pack.rotate}deg)`,
     }"
   >
-    <VIcon v-if="pack.type === 'Kit'" :name="'aid'" :color="'basic'" />
+    <VIcon v-if="pack.type === 'Kit'" :name="'aid'" :color="'blue'" />
     <VIcon v-if="pack.type === 'Deposit'" :name="'deposit'" :color="'green'" />
   </div>
 </template>

@@ -4,21 +4,22 @@ import Wall from '@/entities/wall';
 import CONST from '@/math/const';
 import { Rotate, Vector } from '@/math/math';
 import Settings from '@/logic/settings';
-import { computed, ref } from 'vue';
+import { computed, Ref, ref, toValue } from 'vue';
+import { TEnemiesClasses } from '@/entities/enemies';
 
 class Sluges {
-  static #onlyInstance = null;
+  static #onlyInstance: Sluges | null = null;
+  public sluges: Ref<Array<SlugBuilder>> = ref([]);
   constructor() {
     if (Sluges.#onlyInstance) return Sluges.#onlyInstance;
     Sluges.#onlyInstance = this;
-    this.sluges = ref([]);
   }
 
   init() {
     this.sluges.value = [];
   }
 
-  newSlug(enemy) {
+  newSlug(enemy: TEnemiesClasses) {
     this.sluges.value.push(new SlugBuilder(enemy));
   }
 
@@ -35,19 +36,26 @@ class Sluges {
 export default new Sluges();
 
 class SlugBuilder {
-  constructor(enemy) {
+  public enemy: TEnemiesClasses;
+  public x: Ref<number> = ref(0);
+  public y: Ref<number> = ref(0);
+  public size = CONST.SLUG.SIZE * Settings.scaleSize;
+  public r = this.size / 2;
+  public rotate = ref(0);
+
+  public coefX: number = 0;
+  public coefY: number = 0;
+
+  public collision = false;
+  public target = 'Tower';
+
+  public s_damage: number = 0;
+  public s_spead = computed(() => CONST.SLUG.SPEAD * Settings.scaleSpead.value);
+  constructor(enemy: TEnemiesClasses) {
     this.enemy = enemy;
-    this.x = ref(enemy.x);
-    this.y = ref(enemy.y);
-    this.size = CONST.SLUG.SIZE * Settings.scaleSize;
-    this.r = this.size / 2;
-    this.rotate = ref(0);
-
-    this.collision = false;
-    this.target = 'Tower';
-
+    this.x.value = toValue(enemy.x);
+    this.y.value = toValue(enemy.y);
     this.s_damage = enemy.s_damage;
-    this.s_spead = computed(() => CONST.SLUG.SPEAD * Settings.scaleSpead.value);
 
     this.getDirection();
   }

@@ -1,24 +1,24 @@
 /* eslint-disable no-mixed-operators */
-import Enemies from '@/entities/enemies';
+import Enemies, { TEnemiesClasses } from '@/entities/enemies';
 import Perimeter from '@/entities/perimeter';
 import Updates from '@/mechanics/updates';
 import { Rotate, Vector } from '@/math/math';
 import CONST from '@/math/const';
 import Settings from '@/logic/settings';
-import { computed, ref } from 'vue';
+import { computed, Ref, ref, toValue } from 'vue';
 import Statistic from '@/services/statistic';
 
 class Balls {
-  static #onlyInstance = null;
+  static #onlyInstance: Balls | null = null;
+  public balls: Ref<Array<BallBuilder>> = ref([]);
   constructor() {
     if (Balls.#onlyInstance) return Balls.#onlyInstance;
     Balls.#onlyInstance = this;
-    this.balls = ref([]);
   }
 
   init() {
     this.balls.value = [];
-    let ballsDeg = [];
+    let ballsDeg: Array<number> = [];
     const update = Updates.updates['perimeter'].groups['balls'].updates['number'].count;
     if (update === 0) return;
     if (update === 1) ballsDeg = [0];
@@ -29,7 +29,7 @@ class Balls {
     ballsDeg.forEach((deg) => this.balls.value.push(new BallBuilder(deg)));
   }
 
-  newBall(number) {
+  newBall(number: number) {
     const allBalls = this.balls.value.length + number;
     const degAdd = 360 / allBalls;
     for (let ball = 0; ball < number; ball++) {
@@ -38,9 +38,9 @@ class Balls {
 
     this.balls.value.forEach((ball, i) => {
       if (i === 0) return;
-      let deg = this.balls.value[0].deg + degAdd * i;
+      let deg = this.balls.value[0].getDeg() + degAdd * i;
       if (deg >= 360) deg -= 360;
-      ball.deg = deg;
+      ball.setDeg(deg);
     });
   }
 
@@ -55,28 +55,35 @@ class Balls {
 export default new Balls();
 
 class BallBuilder {
-  constructor(deg) {
-    this.size = CONST.BALL.SIZE * Settings.scaleSize;
-    this.r = this.size / 2;
-    this.deg = ref(deg);
+  public size = CONST.BALL.SIZE * Settings.scaleSize;
+  public r = this.size / 2;
+  public deg = ref(0);
 
-    this.s_deg_spead = computed(() => {
-      const lengthCircle = 2 * Math.PI * CONST.BALL.DISTANCE * Settings.scaleSize;
-      const lengthArc = Updates.updates['perimeter'].groups['balls'].updates['spead'].count * Settings.scaleSpead.value;
-      const degAdd = (360 * lengthArc) / lengthCircle;
-      return degAdd;
-    });
+  public s_deg_spead = computed(() => {
+    const lengthCircle = 2 * Math.PI * CONST.BALL.DISTANCE * Settings.scaleSize;
+    const lengthArc = Updates.updates['perimeter'].groups['balls'].updates['spead'].count * Settings.scaleSpead.value;
+    const degAdd = (360 * lengthArc) / lengthCircle;
+    return degAdd;
+  });
 
-    this.x = computed(() => {
-      const deg = Rotate.getRadInDeg(this.deg.value);
-      return Perimeter.x - Math.cos(deg) * CONST.BALL.DISTANCE * Settings.scaleSize;
-    });
+  public x = computed(() => {
+    const deg = Rotate.getRadInDeg(this.deg.value);
+    return Perimeter.x - Math.cos(deg) * CONST.BALL.DISTANCE * Settings.scaleSize;
+  });
 
-    this.y = computed(() => {
-      const deg = Rotate.getRadInDeg(this.deg.value);
-      return Perimeter.y + Math.sin(deg) * CONST.BALL.DISTANCE * Settings.scaleSize;
-    });
+  public y = computed(() => {
+    const deg = Rotate.getRadInDeg(this.deg.value);
+    return Perimeter.y + Math.sin(deg) * CONST.BALL.DISTANCE * Settings.scaleSize;
+  });
+  constructor(deg: number) {
+    this.deg.value = deg;
   }
+
+  getDeg = () => this.deg.value;
+
+  setDeg = (deg: number) => {
+    this.deg.value = deg;
+  };
 
   move = () => {
     this.deg.value += this.s_deg_spead.value;
@@ -86,14 +93,21 @@ class BallBuilder {
   checkCollision = () => {
     Enemies.enemies.value.forEach((enemy) => {
       if (enemy.u_balls > 0) return;
-      const isCollision = Vector.isCollisionFast(this.x.value, this.y.value, this.r, enemy.x, enemy.y, enemy.r);
+      const isCollision = Vector.isCollisionFast(
+        this.x.value,
+        this.y.value,
+        this.r,
+        toValue(enemy.x),
+        toValue(enemy.y),
+        enemy.r,
+      );
       if (!isCollision) return;
       this.attack(enemy);
     });
   };
 
-  attack = (enemy) => {
-    let damage = enemy.s_hp_max;
+  attack = (enemy: TEnemiesClasses) => {
+    let damage = toValue(enemy.s_hp_max);
     let damagePercent = Updates.updates['perimeter'].groups['balls'].updates['damage'].count;
     if (enemy.name === 'Босс') damagePercent /= 20;
     damage *= damagePercent;

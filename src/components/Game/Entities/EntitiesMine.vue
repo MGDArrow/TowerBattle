@@ -1,7 +1,7 @@
 <template>
   <div
-    v-for="mine in Mines.mines.value"
-    :key="mine.id"
+    v-for="(mine, i) in Mines.mines.value"
+    :key="i"
     class="mine"
     :style="{
       top: `${mine.y}px`,

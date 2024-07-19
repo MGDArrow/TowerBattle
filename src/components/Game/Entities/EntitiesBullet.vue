@@ -1,7 +1,7 @@
 <template>
   <div
     v-for="bullet in Bullets.bullets.value"
-    :key="bullet.id"
+    :key="bullet.target"
     class="bullet"
     :style="{
       top: `${bullet.y}px`,

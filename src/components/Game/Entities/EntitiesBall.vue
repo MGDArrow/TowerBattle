@@ -1,7 +1,7 @@
 <template>
   <div
-    v-for="ball in Balls.balls.value"
-    :key="ball.id"
+    v-for="(ball, i) in Balls.balls.value"
+    :key="i"
     class="ball"
     :style="{
       top: `${ball.y}px`,

@@ -1,26 +1,26 @@
 /* eslint-disable no-mixed-operators */
-import Enemies from '@/entities/enemies';
+import Enemies, { TEnemiesClasses } from '@/entities/enemies';
 import Perimeter from '@/entities/perimeter';
 import Tower from '@/entities/tower';
 import Updates from '@/mechanics/updates';
 import CONST from '@/math/const';
 import { Rotate, Vector } from '@/math/math';
 import Settings from '@/logic/settings';
-import { computed, ref } from 'vue';
+import { computed, Ref, ref, toValue } from 'vue';
 
 class Bullets {
-  static #onlyInstance = null;
+  static #onlyInstance: Bullets | null = null;
+  public bullets: Ref<Array<BulletBuilder>> = ref([]);
   constructor() {
     if (Bullets.#onlyInstance) return Bullets.#onlyInstance;
     Bullets.#onlyInstance = this;
-    this.bullets = ref([]);
   }
 
   init() {
     this.bullets.value = [];
   }
 
-  newBullet(target, damage) {
+  newBullet(target: string, damage: number) {
     this.bullets.value.push(new BulletBuilder(target, damage));
   }
 
@@ -38,23 +38,27 @@ class Bullets {
 export default new Bullets();
 
 class BulletBuilder {
-  constructor(target, damage) {
+  public target: string;
+  public x = ref(Settings.sceneWidth / 2);
+  public y = ref(Settings.sceneHeight / 2);
+  public size = CONST.BULLET.SIZE * Settings.scaleSize;
+  public r = this.size / 2;
+  public rotate = ref(0);
+  public coefX: number = 0;
+  public coefY: number = 0;
+
+  public collision = false;
+  public bounce = 0;
+
+  public s_damage: number;
+  public s_spead = computed(() => CONST.BULLET.SPEAD * Settings.scaleSpead.value);
+  constructor(target: string, damage: number) {
     this.target = target;
-    this.x = ref(Settings.sceneWidth / 2);
-    this.y = ref(Settings.sceneHeight / 2);
-    this.size = CONST.BULLET.SIZE * Settings.scaleSize;
-    this.r = this.size / 2;
-    this.rotate = ref(0);
-
-    this.collision = false;
-    this.bounce = 0;
-
     this.s_damage = damage;
-    this.s_spead = computed(() => CONST.BULLET.SPEAD * Settings.scaleSpead.value);
   }
 
-  getDirection = (enemy) => {
-    const [ABx, ABy] = Vector.getVector(this.x.value, this.y.value, enemy.x, enemy.y);
+  getDirection = (enemy: TEnemiesClasses) => {
+    const [ABx, ABy] = Vector.getVector(this.x.value, this.y.value, toValue(enemy.x), toValue(enemy.y));
     const distance = Vector.getLength(ABx, ABy);
     [this.coefX, this.coefY] = Vector.getNormalize(ABx, ABy, distance);
     this.rotate.value = Rotate.rotateReverse(ABx, ABy, distance);
@@ -67,7 +71,14 @@ class BulletBuilder {
 
     this.x.value += this.coefX * this.s_spead.value;
     this.y.value += this.coefY * this.s_spead.value;
-    this.collision = Vector.isCollisionFast(this.x.value, this.y.value, this.r, enemy.x, enemy.y, enemy.r);
+    this.collision = Vector.isCollisionFast(
+      this.x.value,
+      this.y.value,
+      this.r,
+      toValue(enemy.x),
+      toValue(enemy.y),
+      enemy.r,
+    );
   };
 
   attack = () => {
@@ -80,8 +91,8 @@ class BulletBuilder {
     this.getBounce();
   };
 
-  discardEnemy = (enemy) => {
-    if (enemy.s_hp <= 0) return;
+  discardEnemy = (enemy: TEnemiesClasses) => {
+    if (toValue(enemy.s_hp) <= 0) return;
     const isDiscard = Math.random() <= Updates.updates['defence'].groups['discard'].updates['percent'].count;
     if (!isDiscard) return;
 
@@ -107,13 +118,13 @@ class BulletBuilder {
   };
 }
 
-function getTargetsForBounce(bullet) {
+function getTargetsForBounce(bullet: BulletBuilder): TEnemiesClasses | false {
   const bounceRadius = getBounceRadius();
 
-  const targetsInRadius = filterTargetsInRadius(bullet, bounceRadius);
+  const targetsInRadius: Array<TEnemiesClasses> = filterTargetsInRadius(bullet, bounceRadius);
   if (targetsInRadius.length === 0) return false;
 
-  const targetsWithoutOverdamage = filterTargetsWithoutOverdamage(targetsInRadius);
+  const targetsWithoutOverdamage: Array<TEnemiesClasses> = filterTargetsWithoutOverdamage(targetsInRadius);
 
   sortTargetsByDistance(targetsWithoutOverdamage, bullet);
 
@@ -124,18 +135,18 @@ function getBounceRadius() {
   return Updates.updates['attack'].groups['bounce'].updates['range'].count;
 }
 
-function filterTargetsInRadius(bullet, radius) {
+function filterTargetsInRadius(bullet: BulletBuilder, radius: number): Array<TEnemiesClasses> {
   return Enemies.enemies.value.filter((enemy) => {
     if (enemy.id === bullet.target) return false;
-    return Vector.getVectorLength(bullet.x.value, bullet.y.value, enemy.x, enemy.y) <= radius;
+    return Vector.getVectorLength(bullet.x.value, bullet.y.value, toValue(enemy.x), toValue(enemy.y)) <= radius;
   });
 }
 
-function filterTargetsWithoutOverdamage(targets) {
+function filterTargetsWithoutOverdamage(targets: Array<TEnemiesClasses>): Array<TEnemiesClasses> {
   return targets.filter((target) => {
-    if (target.s_hp <= 0) return false;
+    if (toValue(target.s_hp) <= 0) return false;
     return (
-      target.s_hp >
+      toValue(target.s_hp) >
       new Bullets().bullets.value.reduce(
         (acc, bullet) => (bullet.target !== target.id ? acc : acc + bullet.s_damage),
         0,
@@ -144,12 +155,12 @@ function filterTargetsWithoutOverdamage(targets) {
   });
 }
 
-function sortTargetsByDistance(targets, bullet) {
+function sortTargetsByDistance(targets: Array<TEnemiesClasses>, bullet: BulletBuilder) {
   targets.sort(
     (a, b) =>
-      (bullet.x.value - a.x) ** 2 +
-      (bullet.y.value - a.y) ** 2 -
-      (bullet.x.value - b.x) ** 2 -
-      (bullet.y.value - b.y) ** 2,
+      (bullet.x.value - toValue(a.x)) ** 2 +
+      (bullet.y.value - toValue(a.y)) ** 2 -
+      (bullet.x.value - toValue(b.x)) ** 2 -
+      (bullet.y.value - toValue(b.y)) ** 2,
   );
 }

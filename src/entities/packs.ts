@@ -7,29 +7,42 @@ import { MyMath, Rotate, Vector } from '@/math/math';
 import Messages from '@/services/message';
 import Statistic from '@/services/statistic';
 import Settings from '@/logic/settings';
-import { computed, ref } from 'vue';
+import { computed, Ref, ref } from 'vue';
 
+type TPacksName = 'Kit' | 'Deposit';
+type TPacksClasses = Kit | Deposit;
+
+class FactoryPack {
+  newPack(type: TPacksName) {
+    if (type === 'Kit') return new Kit();
+    if (type === 'Deposit') return new Deposit();
+    return new Deposit();
+  }
+}
 class Packs {
-  static #onlyInstance = null;
+  static #onlyInstance: Packs | null = null;
+
+  public packs: Ref<Array<TPacksClasses>> = ref([]);
+  public u_deposit = ref(0);
+  public factory = new FactoryPack();
+
   constructor() {
     if (Packs.#onlyInstance) return Packs.#onlyInstance;
     Packs.#onlyInstance = this;
-    this.packs = ref([]);
-    this.u_deposit = ref(0);
   }
 
   init() {
     this.packs.value = [];
     this.factory = new FactoryPack();
 
-    this.u_deposit.value = Updates.updates['money'].groups['deposit'].updates['cooldown'].count + Settings.gameInit;
+    this.u_deposit.value = Updates.updates['money'].groups['deposit'].updates['cooldown'].count + Settings.waveInit;
   }
 
-  newPack(type) {
+  newPack(type: TPacksName) {
     this.packs.value.push(this.factory.newPack(type));
   }
 
-  tick(dt) {
+  tick(dt: number) {
     if (Updates.updates['money'].groups['deposit'].updates['cooldown'].lvl_max > 0) this.u_deposit.value -= dt;
     if (this.u_deposit.value <= 0) {
       this.newPack('Deposit');
@@ -47,22 +60,19 @@ class Packs {
 
 export default new Packs();
 
-class FactoryPack {
-  newPack(type) {
-    if (type === 'Kit') return new Kit();
-    if (type === 'Deposit') return new Deposit();
-  }
-}
-
 class BasePack {
-  constructor() {
-    this.size = CONST.PACK.SIZE * Settings.scaleSize;
-    this.r = this.size / 2;
-    [this.x, this.y] = MyMath.getStartPosition(this.size);
+  public size = CONST.PACK.SIZE * Settings.scaleSize;
+  public r = this.size / 2;
+  public x: Ref<number>;
+  public y: Ref<number>;
+  public coefX: number = 0;
+  public coefY: number = 0;
 
-    this.s_spead = computed(() => CONST.PACK.SPEAD * Settings.scaleSpead.value);
-    this.collision = false;
-    this.rotate = ref(0);
+  public s_spead = computed(() => CONST.PACK.SPEAD * Settings.scaleSpead.value);
+  public collision = false;
+  public rotate = ref(0);
+  constructor() {
+    [this.x, this.y] = MyMath.getStartPosition(this.size);
 
     this.getDirection();
   }
@@ -82,10 +92,10 @@ class BasePack {
 }
 
 class Kit extends BasePack {
+  public type = 'Kit';
+  public s_heal = Tower.s_hp_max.value * Updates.updates['defence'].groups['kit'].updates['heal'].count;
   constructor() {
     super();
-    this.type = 'Kit';
-    this.s_heal = Tower.s_hp_max.value * Updates.updates['defence'].groups['kit'].updates['heal'].count;
   }
 
   activated = () => {
@@ -95,13 +105,13 @@ class Kit extends BasePack {
 }
 
 class Deposit extends BasePack {
+  public type = 'Deposit';
+  public addDollars = Math.min(
+    Tower.dollars.value * Updates.updates['money'].groups['deposit'].updates['percent'].count,
+    Updates.updates['money'].groups['deposit'].updates['max'].count,
+  );
   constructor() {
     super();
-    this.type = 'Deposit';
-    this.addDollars = Math.min(
-      Tower.dollars.value * Updates.updates['money'].groups['deposit'].updates['percent'].count,
-      Updates.updates['money'].groups['deposit'].updates['max'].count,
-    );
   }
 
   activated = () => {

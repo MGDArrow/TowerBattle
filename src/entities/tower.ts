@@ -1,24 +1,32 @@
 /* eslint-disable no-mixed-operators */
 import Bullets from '@/entities/bullets';
-import Enemies from '@/entities/enemies';
+import Enemies, { TEnemiesClasses } from '@/entities/enemies';
 import Perimeter from '@/entities/perimeter';
 import Updates from '@/mechanics/updates';
 import CONST from '@/math/const';
 import Statistic from '@/services/statistic';
 import Settings from '@/logic/settings';
-import { computed, ref } from 'vue';
+import { computed, ComputedRef, Ref, ref, toValue } from 'vue';
 
 class Tower {
-  static #onlyInstance = null;
+  static #onlyInstance: Tower | null = null;
+
+  public x: number = 0;
+  public y: number = 0;
+  public size: number = 0;
+  public r: number = 0;
+
+  public dollars = ref(0);
+  public s_hp = ref(0);
+  public s_cooldown = ref(0);
+  public u_runaway = ref(0);
+  public u_revival = ref(0);
+
+  public s_hp_max = computed(() => Updates.updates['defence'].groups['basic'].updates['hp'].count);
+  public s_damage = computed(() => Updates.updates['attack'].groups['basic'].updates['damage'].count);
   constructor() {
     if (Tower.#onlyInstance) return Tower.#onlyInstance;
     Tower.#onlyInstance = this;
-
-    this.dollars = ref(0);
-    this.s_hp = ref(0);
-    this.s_cooldown = ref(0);
-    this.u_runaway = ref(0);
-    this.u_revival = ref(0);
   }
 
   init() {
@@ -30,15 +38,14 @@ class Tower {
     this.dollars.value = CONST.TOWER.START_DOLLARS;
 
     this.s_hp.value = Updates.updates['defence'].groups['basic'].updates['hp'].count;
-    this.s_hp_max = computed(() => Updates.updates['defence'].groups['basic'].updates['hp'].count);
-    this.s_damage = computed(() => Updates.updates['attack'].groups['basic'].updates['damage'].count);
+
     this.s_cooldown.value = 0;
 
     this.u_runaway.value = 0;
     this.u_revival.value = 0;
   }
 
-  tick = (dt) => {
+  tick = (dt: number) => {
     if (this.u_runaway.value > 0) this.u_runaway.value -= dt;
     if (this.u_revival.value > 0) this.u_revival.value -= dt;
     if (this.s_cooldown.value > 0) this.s_cooldown.value -= dt;
@@ -49,7 +56,7 @@ class Tower {
     if (targetsForShot.length > 0) this.takeShot(targetsForShot);
   };
 
-  regenHP = (dt) => {
+  regenHP = (dt: number) => {
     const maxRegen = this.s_hp_max.value - this.s_hp.value;
     let regenHP = Updates.updates['defence'].groups['basic'].updates['regen'].count * (dt / 1000);
     if (regenHP > maxRegen) regenHP = maxRegen;
@@ -57,7 +64,7 @@ class Tower {
     Statistic.inc('hp_regen', regenHP);
   };
 
-  takeShot = (targetsForShot) => {
+  takeShot = (targetsForShot: Array<TEnemiesClasses>) => {
     for (let i = 0; i < calculateNumberBulletsWithVolley(targetsForShot); i++)
       Bullets.newBullet(targetsForShot[i].id, calculateDamageWithCrit(this.s_damage.value));
 
@@ -66,7 +73,7 @@ class Tower {
     this.s_cooldown.value = CONST.TOWER.COOLDOWN / calculateAttackSpead(this.u_runaway);
   };
 
-  regenVampitic = (damage) => {
+  regenVampitic = (damage: number) => {
     if (this.s_hp.value >= this.s_hp_max.value) return;
     const isVampiric = Math.random() <= Updates.updates['defence'].groups['vampiric'].updates['percent'].count;
     if (!isVampiric) return;
@@ -78,7 +85,7 @@ class Tower {
     Statistic.inc('hp_vampiric', vampiricHP);
   };
 
-  getDamage = (damage) => {
+  getDamage = (damage: number) => {
     if (this.u_revival.value > 0) return;
 
     let getDamage = damage;
@@ -91,13 +98,13 @@ class Tower {
     calculateStartRevival(this.s_hp, this.s_hp_max, this.u_revival);
   };
 
-  addHP = (hp) => {
+  addHP = (hp: number) => {
     this.s_hp.value += hp;
     const kitMax = this.s_hp_max.value * Updates.updates['defence'].groups['kit'].updates['max'].count;
     if (this.s_hp.value > kitMax) this.s_hp.value = kitMax;
   };
 
-  counterattackSpikes = (enemy) => {
+  counterattackSpikes = (enemy: TEnemiesClasses) => {
     if (enemy.u_spikes > 0) return;
 
     enemy.u_spikes = Updates.updates['perimeter'].groups['spikes'].updates['cooldown'].count;
@@ -115,32 +122,32 @@ class Tower {
 
 export default new Tower();
 
-function getTargetsForShot(towerR) {
+function getTargetsForShot(towerR: number): Array<TEnemiesClasses> {
   //** Поиск целей внутри периметра **//
-  let targets = Enemies.enemies.value.filter((enemy) => Perimeter.r.value >= enemy.distance + towerR);
+  let targets = Enemies.enemies.value.filter((enemy) => Perimeter.r.value >= toValue(enemy.distance) + towerR);
   if (targets.length === 0) return [];
 
   //** Отмена удара по тем целям, к которым уже летит достаточное колличество пуль **//
   targets = targets.filter((target) => {
-    if (target.s_hp <= 0) return false;
+    if (toValue(target.s_hp) <= 0) return false;
     let targetFutureDamage = 0;
     Bullets.bullets.value.forEach(
       (bullet) => (targetFutureDamage += bullet.target !== target.id ? 0 : bullet.s_damage),
     );
-    return target.s_hp > targetFutureDamage;
+    return toValue(target.s_hp) > targetFutureDamage;
   });
 
   //** Разделение целей на прилягающие и не прилягающие к башке **//
-  let targetsNearTower = [];
-  let targetsIsNotNearTower = [];
+  let targetsNearTower: Array<TEnemiesClasses> = [];
+  let targetsIsNotNearTower: Array<TEnemiesClasses> = [];
   targets.forEach((target) => {
-    if (target.distance <= 0) targetsNearTower.push(target);
+    if (toValue(target.distance) <= 0) targetsNearTower.push(target);
     else targetsIsNotNearTower.push(target);
   });
 
   //** Сортировка по хп для прилягающих и по дистанции для не прилягающих **//
-  targetsNearTower.sort((a, b) => a.s_hp - b.s_hp);
-  targetsIsNotNearTower.sort((a, b) => a.distance - b.distance);
+  targetsNearTower.sort((a, b) => toValue(a.s_hp) - toValue(b.s_hp));
+  targetsIsNotNearTower.sort((a, b) => toValue(a.distance) - toValue(b.distance));
 
   //** Добавление приоритета по прилягающему боссу **//
   const bossId = targetsNearTower.findIndex((enemy) => enemy.name === 'Босс');
@@ -153,14 +160,14 @@ function getTargetsForShot(towerR) {
   return [...targetsNearTower, ...targetsIsNotNearTower];
 }
 
-function calculateNumberBulletsWithVolley(targetsForShot) {
+function calculateNumberBulletsWithVolley(targetsForShot: Array<TEnemiesClasses>) {
   const isVolley = Math.random() <= Updates.updates['attack'].groups['volley'].updates['percent'].count;
   if (!isVolley) return 1;
   Statistic.inc('updates_volley', 1);
   return Math.min(Updates.updates['attack'].groups['volley'].updates['number'].count, targetsForShot.length);
 }
 
-function calculateDamageWithCrit(damage) {
+function calculateDamageWithCrit(damage: number) {
   //** Просчет обычного крита **//
   const isCrit = Math.random() <= Updates.updates['attack'].groups['crit'].updates['percent'].count;
   if (!isCrit) return damage;
@@ -174,7 +181,7 @@ function calculateDamageWithCrit(damage) {
   return critDamage * Updates.updates['attack'].groups['multicrit'].updates['coef'].count;
 }
 
-function calculateStartRunaway(runawayTime) {
+function calculateStartRunaway(runawayTime: Ref<number>) {
   if (runawayTime.value > 0) return;
   const startRunaway = Math.random() <= Updates.updates['attack'].groups['runaway'].updates['percent'].count;
   if (!startRunaway) return;
@@ -182,13 +189,13 @@ function calculateStartRunaway(runawayTime) {
   runawayTime.value = Updates.updates['attack'].groups['runaway'].updates['duration'].count;
 }
 
-function calculateAttackSpead(runawayTime) {
+function calculateAttackSpead(runawayTime: Ref<number>) {
   let baseAttackSpead = Updates.updates['attack'].groups['basic'].updates['spead'].count;
   if (runawayTime.value > 0) baseAttackSpead *= Updates.updates['attack'].groups['runaway'].updates['spead'].count;
   return baseAttackSpead;
 }
 
-function calculateStartRevival(hp, hp_max, timer) {
+function calculateStartRevival(hp: Ref<number>, hp_max: ComputedRef<number>, timer: Ref<number>) {
   if (hp.value > 0) return;
   const isRevival = Math.random() <= Updates.updates['defence'].groups['revival'].updates['percent'].count;
   if (!isRevival) return;

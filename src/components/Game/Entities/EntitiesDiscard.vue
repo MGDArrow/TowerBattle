@@ -1,7 +1,7 @@
 <template>
   <div
-    v-for="discard in DiscardWaves.discardWaves.value"
-    :key="discard.id"
+    v-for="(discard, i) in DiscardWaves.discardWaves.value"
+    :key="i"
     class="discard"
     :style="{
       top: `${discard.y}px`,

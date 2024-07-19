@@ -19,12 +19,12 @@
   import { computed } from 'vue';
 
   const borderStyle = computed(() => {
-    const color = Wall.status.value === 'ready' ? 'var(--col-turq)' : 'var(--col-bg-dis)';
+    const color = Wall.status.value === 'ready' ? 'var(--col-turq)' : 'var(--col-grey-l)';
     const percent =
       Wall.status.value === 'ready'
         ? Wall.s_hp.value / Wall.s_hp_max.value
         : Wall.u_building_now.value / Wall.u_building_time.value;
-    return `conic-gradient(${color} ${percent * 100}%, var(--col-bg-focus) 0%)`;
+    return `conic-gradient(${color} ${percent * 100}%, var(--col-grey) 0%)`;
   });
   const shadowStyle = computed(() => {
     const isShadow = Wall.status.value === 'ready';

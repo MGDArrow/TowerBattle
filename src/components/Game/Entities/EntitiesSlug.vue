@@ -1,7 +1,7 @@
 <template>
   <div
     v-for="slug in Sluges.sluges.value"
-    :key="slug.id"
+    :key="slug.target"
     class="slug"
     :style="{
       top: `${slug.y}px`,

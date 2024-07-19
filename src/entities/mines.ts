@@ -6,30 +6,30 @@ import Updates from '@/mechanics/updates';
 import CONST from '@/math/const';
 import { Vector } from '@/math/math';
 import Settings from '@/logic/settings';
-import { computed, ref } from 'vue';
+import { computed, Ref, ref, toValue } from 'vue';
 
 class Mines {
-  static #onlyInstance = null;
+  static #onlyInstance: Mines | null = null;
+  mines: Ref<Array<MineBuilder>> = ref([]);
   constructor() {
     if (Mines.#onlyInstance) return Mines.#onlyInstance;
     Mines.#onlyInstance = this;
-    this.mines = ref([]);
   }
 
   init() {
     this.mines.value = [];
   }
 
-  newMine(x, y) {
+  newMine(x: number, y: number) {
     const isNewMine = Math.random() <= Updates.updates['perimeter'].groups['mines'].updates['percent'].count;
     if (!isNewMine) return;
     this.mines.value.push(new MineBuilder(x, y));
   }
 
-  tick(dt) {
+  tick = (dt: number) => {
     this.mines.value = this.mines.value.filter((mine) => {
-      mine.time -= dt;
-      if (mine.time <= 0) {
+      mine.time.value -= dt;
+      if (mine.time.value <= 0) {
         mine.activated();
         return false;
       }
@@ -40,34 +40,36 @@ class Mines {
       mine.activated();
       return false;
     });
-  }
+  };
 }
 
 export default new Mines();
 
 class MineBuilder {
-  constructor(x, y) {
-    this.size = CONST.MINE.SIZE * Settings.scaleSize;
-    this.r = this.size / 2;
+  size = CONST.MINE.SIZE * Settings.scaleSize;
+  r = this.size / 2;
+  x = 0;
+  y = 0;
+
+  time = ref(CONST.MINE.LIFETIME);
+  time_progress = computed(() => (this.time.value / CONST.MINE.LIFETIME) * 100);
+
+  s_radius = (Updates.updates['perimeter'].groups['mines'].updates['radius'].count * Settings.scaleSize) / 2;
+  s_damage =
+    Updates.updates['attack'].groups['basic'].updates['damage'].count *
+    Updates.updates['perimeter'].groups['mines'].updates['damage'].count;
+
+  collision = false;
+  constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
-
-    this.time = ref(CONST.MINE.LIFETIME);
-    this.time_progress = computed(() => (this.time.value / CONST.MINE.LIFETIME) * 100);
-
-    this.s_radius = (Updates.updates['perimeter'].groups['mines'].updates['radius'].count * Settings.scaleSize) / 2;
-    this.s_damage =
-      Updates.updates['attack'].groups['basic'].updates['damage'].count *
-      Updates.updates['perimeter'].groups['mines'].updates['damage'].count;
-
-    this.collision = false;
   }
 
   checkCollision = () => {
     for (let i = 0; i < Enemies.enemies.value.length; i++) {
       const enemy = Enemies.enemies.value[i];
-      if (enemy.s_hp <= 0) continue;
-      const isCollision = Vector.isCollisionFast(this.x, this.y, this.r, enemy.x, enemy.y, enemy.r);
+      if (toValue(enemy.s_hp) <= 0) continue;
+      const isCollision = Vector.isCollisionFast(this.x, this.y, this.r, toValue(enemy.x), toValue(enemy.y), enemy.r);
       if (!isCollision) continue;
       this.collision = true;
       break;
@@ -81,8 +83,15 @@ class MineBuilder {
 
   boom = () => {
     Enemies.enemies.value.forEach((enemy) => {
-      if (enemy.s_hp <= 0) return;
-      const isCollision = Vector.isCollisionFast(this.x, this.y, this.s_radius, enemy.x, enemy.y, enemy.r);
+      if (toValue(enemy.s_hp) <= 0) return;
+      const isCollision = Vector.isCollisionFast(
+        this.x,
+        this.y,
+        this.s_radius,
+        toValue(enemy.x),
+        toValue(enemy.y),
+        enemy.r,
+      );
       if (!isCollision) return;
       enemy.getDamage(this.s_damage);
       Statistic.inc('damage_mines', this.s_damage);

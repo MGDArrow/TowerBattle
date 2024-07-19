@@ -4,15 +4,20 @@ import Settings from '@/logic/settings';
 import { computed, ref } from 'vue';
 
 class Wall {
-  static #onlyInstance = null;
+  static #onlyInstance: Wall | null = null;
+  public status = ref('build');
+  public s_hp = ref(0);
+  public s_hp_max = ref(0);
+  public u_building_now = ref(0);
+  public u_building_time = computed(() => Updates.updates['perimeter'].groups['wall'].updates['building'].count);
+
+  public x = 0;
+  public y = 0;
+  public size = 0;
+  public r = 0;
   constructor() {
     if (Wall.#onlyInstance) return Wall.#onlyInstance;
     Wall.#onlyInstance = this;
-
-    this.status = ref('build');
-    this.s_hp = ref(0);
-    this.s_hp_max = ref(0);
-    this.u_building_now = ref(0);
   }
 
   init = () => {
@@ -26,10 +31,9 @@ class Wall {
     this.s_hp_max.value = 0;
 
     this.u_building_now.value = 0;
-    this.u_building_time = computed(() => Updates.updates['perimeter'].groups['wall'].updates['building'].count);
   };
 
-  tick = (dt) => {
+  tick = (dt: number) => {
     if (Updates.updates['perimeter'].groups['wall'].updates['building'].lvl_max <= 0) return;
     if (this.status.value === 'build') {
       this.u_building_now.value += dt;
@@ -46,7 +50,7 @@ class Wall {
     if (this.s_hp.value <= 0) this.status.value = 'build';
   };
 
-  getDamage = (damage) => {
+  getDamage = (damage: number) => {
     if (damage < 0) return;
     this.s_hp.value -= damage;
   };

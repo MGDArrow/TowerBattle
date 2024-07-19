@@ -5,14 +5,16 @@ import Tower from '@/entities/tower';
 import Updates from '@/mechanics/updates';
 import CONST from '@/math/const';
 import Settings from '@/logic/settings';
-import { computed, ref } from 'vue';
+import { computed, Ref, ref, toValue } from 'vue';
 
 class DiscardWaves {
-  static #onlyInstance = null;
+  static #onlyInstance: DiscardWaves | null = null;
+
+  discardWaves: Ref<Array<DiscardWaveBuilder>> = ref([]);
+
   constructor() {
     if (DiscardWaves.#onlyInstance) return DiscardWaves.#onlyInstance;
     DiscardWaves.#onlyInstance = this;
-    this.discardWaves = ref([]);
   }
 
   init() {
@@ -37,18 +39,16 @@ class DiscardWaves {
 export default new DiscardWaves();
 
 class DiscardWaveBuilder {
-  constructor() {
-    this.size = ref(Tower.size);
-    this.x = Tower.x;
-    this.y = Tower.y;
+  size = ref(Tower.size);
+  x = Tower.x;
+  y = Tower.y;
 
-    this.r = computed(() => this.size.value / 2);
-    this.rIn = computed(() => this.r.value - Settings.sceneHeight / 200);
+  r = computed(() => this.size.value / 2);
+  rIn = computed(() => this.r.value - Settings.sceneHeight / 200);
 
-    this.s_spead = CONST.DISCARD_WAVE.SPEAD * Settings.scaleSpead.value;
+  s_spead = CONST.DISCARD_WAVE.SPEAD * Settings.scaleSpead.value;
 
-    this.end = false;
-  }
+  end = false;
 
   move = () => {
     if (this.size.value > Perimeter.size.value) return (this.end = true);
@@ -57,7 +57,7 @@ class DiscardWaveBuilder {
 
   discard = () => {
     const enemiesToDiscard = Enemies.enemies.value.filter((enemy) => {
-      const enemyDistance = enemy.distance + Tower.r;
+      const enemyDistance = toValue(enemy.distance) + Tower.r;
       return this.r.value >= enemyDistance && this.rIn.value <= enemyDistance;
     });
     if (!enemiesToDiscard.length) return;

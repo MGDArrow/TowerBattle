@@ -9,7 +9,7 @@
     <EntitiesTower />
     <EntitiesEnemy />
     <EntitiesPack />
-    <EntitiesParticles v-for="particle in Particles.particles.value" :key="particle.id" :particle="particle" />
+    <EntitiesParticles v-for="(particle, index) in Particles.particles.value" :key="index" :particle="particle" />
     <EntitiesDiscard />
   </div>
 </template>
