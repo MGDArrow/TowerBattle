@@ -6,7 +6,7 @@ import Updates from '@/mechanics/updates';
 import CONST from '@/math/const';
 import Statistic from '@/services/statistic';
 import Settings from '@/logic/settings';
-import { computed, ComputedRef, Ref, ref, toValue } from 'vue';
+import { computed, ComputedRef, Ref, ref } from 'vue';
 
 class Tower {
   static #onlyInstance: Tower | null = null;
@@ -124,30 +124,30 @@ export default new Tower();
 
 function getTargetsForShot(towerR: number): Array<TEnemiesClasses> {
   //** Поиск целей внутри периметра **//
-  let targets = Enemies.enemies.value.filter((enemy) => Perimeter.r.value >= toValue(enemy.distance) + towerR);
+  let targets = Enemies.enemies.value.filter((enemy) => Perimeter.r.value >= enemy.distance + towerR);
   if (targets.length === 0) return [];
 
   //** Отмена удара по тем целям, к которым уже летит достаточное колличество пуль **//
   targets = targets.filter((target) => {
-    if (toValue(target.s_hp) <= 0) return false;
+    if (target.s_hp <= 0) return false;
     let targetFutureDamage = 0;
     Bullets.bullets.value.forEach(
       (bullet) => (targetFutureDamage += bullet.target !== target.id ? 0 : bullet.s_damage),
     );
-    return toValue(target.s_hp) > targetFutureDamage;
+    return target.s_hp > targetFutureDamage;
   });
 
   //** Разделение целей на прилягающие и не прилягающие к башке **//
   let targetsNearTower: Array<TEnemiesClasses> = [];
   let targetsIsNotNearTower: Array<TEnemiesClasses> = [];
   targets.forEach((target) => {
-    if (toValue(target.distance) <= 0) targetsNearTower.push(target);
+    if (target.distance <= 0) targetsNearTower.push(target);
     else targetsIsNotNearTower.push(target);
   });
 
   //** Сортировка по хп для прилягающих и по дистанции для не прилягающих **//
-  targetsNearTower.sort((a, b) => toValue(a.s_hp) - toValue(b.s_hp));
-  targetsIsNotNearTower.sort((a, b) => toValue(a.distance) - toValue(b.distance));
+  targetsNearTower.sort((a, b) => a.s_hp - b.s_hp);
+  targetsIsNotNearTower.sort((a, b) => a.distance - b.distance);
 
   //** Добавление приоритета по прилягающему боссу **//
   const bossId = targetsNearTower.findIndex((enemy) => enemy.name === 'Босс');

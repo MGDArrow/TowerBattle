@@ -5,7 +5,7 @@ import Tower from '@/entities/tower';
 import Updates from '@/mechanics/updates';
 import CONST from '@/math/const';
 import Settings from '@/logic/settings';
-import { computed, Ref, ref, toValue } from 'vue';
+import { computed, Ref, ref } from 'vue';
 
 class DiscardWaves {
   static #onlyInstance: DiscardWaves | null = null;
@@ -57,7 +57,7 @@ class DiscardWaveBuilder {
 
   discard = () => {
     const enemiesToDiscard = Enemies.enemies.value.filter((enemy) => {
-      const enemyDistance = toValue(enemy.distance) + Tower.r;
+      const enemyDistance = enemy.distance + Tower.r;
       return this.r.value >= enemyDistance && this.rIn.value <= enemyDistance;
     });
     if (!enemiesToDiscard.length) return;

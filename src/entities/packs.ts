@@ -63,31 +63,31 @@ export default new Packs();
 class BasePack {
   public size = CONST.PACK.SIZE * Settings.scaleSize;
   public r = this.size / 2;
-  public x: Ref<number>;
-  public y: Ref<number>;
+  public x: number;
+  public y: number;
   public coefX: number = 0;
   public coefY: number = 0;
 
   public s_spead = computed(() => CONST.PACK.SPEAD * Settings.scaleSpead.value);
   public collision = false;
-  public rotate = ref(0);
+  public rotate = 0;
   constructor() {
-    [this.x, this.y] = MyMath.getStartPosition(this.size);
+    [this.x, this.y] = MyMath.getStartPositionClear(this.size);
 
     this.getDirection();
   }
 
   getDirection = () => {
-    const [ABx, ABy] = Vector.getVector(this.x.value, this.y.value, Tower.x, Tower.y);
+    const [ABx, ABy] = Vector.getVector(this.x, this.y, Tower.x, Tower.y);
     const distance = Vector.getLength(ABx, ABy);
     [this.coefX, this.coefY] = Vector.getNormalize(ABx, ABy, distance);
-    this.rotate.value = Rotate.rotate(ABx, ABy, distance);
+    this.rotate = Rotate.rotate(ABx, ABy, distance);
   };
 
   move = () => {
-    this.x.value += this.coefX * this.s_spead.value;
-    this.y.value += this.coefY * this.s_spead.value;
-    this.collision = Vector.isCollisionFast(this.x.value, this.y.value, this.r, Tower.x, Tower.y, Tower.r);
+    this.x += this.coefX * this.s_spead.value;
+    this.y += this.coefY * this.s_spead.value;
+    this.collision = Vector.isCollisionFast(this.x, this.y, this.r, Tower.x, Tower.y, Tower.r);
   };
 }
 
@@ -100,7 +100,7 @@ class Kit extends BasePack {
 
   activated = () => {
     Tower.addHP(this.s_heal);
-    Particles.newParticles('Аптечка', this.x.value, this.y.value);
+    Particles.newParticles('Аптечка', this.x, this.y);
   };
 }
 
@@ -117,7 +117,7 @@ class Deposit extends BasePack {
   activated = () => {
     Tower.dollars.value += this.addDollars;
     Messages.add(`+${MyMath.toText(this.addDollars, 3)}`);
-    Particles.newParticles('Депозит', this.x.value, this.y.value);
+    Particles.newParticles('Депозит', this.x, this.y);
     Statistic.inc('dollars_deposit', this.addDollars);
   };
 }

@@ -5,7 +5,7 @@ import Updates from '@/mechanics/updates';
 import { Rotate, Vector } from '@/math/math';
 import CONST from '@/math/const';
 import Settings from '@/logic/settings';
-import { computed, Ref, ref, toValue } from 'vue';
+import { computed, Ref, ref } from 'vue';
 import Statistic from '@/services/statistic';
 
 class Balls {
@@ -93,21 +93,14 @@ class BallBuilder {
   checkCollision = () => {
     Enemies.enemies.value.forEach((enemy) => {
       if (enemy.u_balls > 0) return;
-      const isCollision = Vector.isCollisionFast(
-        this.x.value,
-        this.y.value,
-        this.r,
-        toValue(enemy.x),
-        toValue(enemy.y),
-        enemy.r,
-      );
+      const isCollision = Vector.isCollisionFast(this.x.value, this.y.value, this.r, enemy.x, enemy.y, enemy.r);
       if (!isCollision) return;
       this.attack(enemy);
     });
   };
 
   attack = (enemy: TEnemiesClasses) => {
-    let damage = toValue(enemy.s_hp_max);
+    let damage = enemy.s_hp_max;
     let damagePercent = Updates.updates['perimeter'].groups['balls'].updates['damage'].count;
     if (enemy.name === 'Босс') damagePercent /= 20;
     damage *= damagePercent;

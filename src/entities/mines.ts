@@ -6,7 +6,7 @@ import Updates from '@/mechanics/updates';
 import CONST from '@/math/const';
 import { Vector } from '@/math/math';
 import Settings from '@/logic/settings';
-import { computed, Ref, ref, toValue } from 'vue';
+import { computed, Ref, ref } from 'vue';
 
 class Mines {
   static #onlyInstance: Mines | null = null;
@@ -68,8 +68,8 @@ class MineBuilder {
   checkCollision = () => {
     for (let i = 0; i < Enemies.enemies.value.length; i++) {
       const enemy = Enemies.enemies.value[i];
-      if (toValue(enemy.s_hp) <= 0) continue;
-      const isCollision = Vector.isCollisionFast(this.x, this.y, this.r, toValue(enemy.x), toValue(enemy.y), enemy.r);
+      if (enemy.s_hp <= 0) continue;
+      const isCollision = Vector.isCollisionFast(this.x, this.y, this.r, enemy.x, enemy.y, enemy.r);
       if (!isCollision) continue;
       this.collision = true;
       break;
@@ -83,15 +83,8 @@ class MineBuilder {
 
   boom = () => {
     Enemies.enemies.value.forEach((enemy) => {
-      if (toValue(enemy.s_hp) <= 0) return;
-      const isCollision = Vector.isCollisionFast(
-        this.x,
-        this.y,
-        this.s_radius,
-        toValue(enemy.x),
-        toValue(enemy.y),
-        enemy.r,
-      );
+      if (enemy.s_hp <= 0) return;
+      const isCollision = Vector.isCollisionFast(this.x, this.y, this.s_radius, enemy.x, enemy.y, enemy.r);
       if (!isCollision) return;
       enemy.getDamage(this.s_damage);
       Statistic.inc('damage_mines', this.s_damage);

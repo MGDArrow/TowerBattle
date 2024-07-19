@@ -35,6 +35,16 @@ export class MyMath {
       ? [ref(signExtreeme ? 0 - size : sceneWidth + size), ref(this.random(0 - size, sceneHeight + size))]
       : [ref(this.random(0 - size, sceneWidth + size)), ref(signExtreeme ? 0 - size : sceneHeight + size)];
   }
+  //** Рандом первоначальной позиции за экраном **//
+  static getStartPositionClear(size: number): [number, number] {
+    const xExtreeme: boolean = Math.random() < 0.5;
+    const signExtreeme: boolean = Math.random() < 0.5;
+    const sceneWidth: number = window.innerWidth;
+    const sceneHeight: number = window.innerHeight;
+    return xExtreeme
+      ? [signExtreeme ? 0 - size : sceneWidth + size, this.random(0 - size, sceneHeight + size)]
+      : [this.random(0 - size, sceneWidth + size), signExtreeme ? 0 - size : sceneHeight + size];
+  }
 
   //** Числа в строки с E+10 нотацией  **//
   static toEText(value: number): string {
