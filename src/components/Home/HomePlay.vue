@@ -14,7 +14,9 @@
       </div>
       <div class="home-play__arrow flex-center bg-h-grey" @click="changeLvl(1)"><VIcon :name="'angle-right'" /></div>
     </div>
-    <div class="home-play__btn border-blue shadow-blue bg-bg bg-h-blue flex-center">Начать игру</div>
+    <router-link :to="{ name: 'Game' }" class="home-play__btn border-blue shadow-blue bg-bg bg-h-blue flex-center">
+      Начать игру
+    </router-link>
   </div>
 </template>
 
@@ -37,7 +39,8 @@
     left: 50%;
     font-size: 3rem;
     transform: translate(-50%, -50%);
-    & > div {
+    & > div,
+    & > a {
       width: 28vw;
       height: 10dvh;
       margin-bottom: 1dvh;
