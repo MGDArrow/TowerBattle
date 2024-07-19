@@ -29,9 +29,9 @@
   .updates__coef {
     display: flex;
     gap: 1dvh;
-    height: 3dvh;
+    height: 2.5dvh;
     margin-bottom: 1dvh;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     & > div {
       flex: 1;
       cursor: pointer;

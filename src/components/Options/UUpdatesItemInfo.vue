@@ -75,7 +75,7 @@
       width: 100%;
       height: 6.2dvh;
       padding: 0 0.3dvh;
-      font-size: 1.5em;
+      font-size: 1.3em;
       & span {
         display: block;
         line-height: calc(6dvh / 2);

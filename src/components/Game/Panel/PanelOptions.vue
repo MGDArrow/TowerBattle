@@ -145,7 +145,7 @@
       }
       &:first-child,
       &:last-child {
-        width: 30%;
+        width: 25%;
         height: 100%;
       }
 

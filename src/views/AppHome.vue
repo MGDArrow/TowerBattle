@@ -54,13 +54,13 @@
     padding: 1dvh;
     overflow: hidden;
     &__main--options {
-      width: calc(70% - 1.5dvh);
+      width: calc(75% - 1.5dvh);
     }
     &__info {
       position: absolute;
       top: 1dvh;
       right: 1dvh;
-      width: 30%;
+      width: 25%;
       height: 98dvh;
     }
   }
@@ -70,9 +70,9 @@
     transition: $transition-main;
   }
   .fade-enter-from {
-    right: calc(-30% + 1.3dvh);
+    right: calc(-25% + 1.3dvh);
   }
   .fade-leave-to {
-    right: calc(-30% - 1.3dvh);
+    right: calc(-25% - 1.3dvh);
   }
 </style>

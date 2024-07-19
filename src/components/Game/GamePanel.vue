@@ -1,7 +1,6 @@
 <template>
   <div class="game__panel">
-    <PanelValuta />
-    <PanelLvlbar @setOptions="(e) => setOptions(e)" />
+    <PanelValuta @setOptions="(e) => setOptions(e)" />
     <PanelPlayzone :options="options" />
     <PanelOptions @setOptions="(e) => setOptions(e)" :options="options" />
   </div>
@@ -9,7 +8,6 @@
 
 <script setup lang="ts">
   import PanelValuta from '@/components/Game/Panel/PanelValuta.vue';
-  import PanelLvlbar from '@/components/Game/Panel/PanelLvlbar.vue';
   import PanelPlayzone from '@/components/Game/Panel/PanelPlayzone.vue';
   import PanelOptions from '@/components/Game/Panel/PanelOptions.vue';
 

@@ -27,12 +27,12 @@
     display: flex;
     flex-direction: column;
     gap: 1dvh;
-    width: 3dvh;
+    width: 2.5dvh;
     margin-right: 1dvh;
     cursor: pointer;
     & > div {
       flex: 1;
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
   }
 </style>

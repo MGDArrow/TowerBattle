@@ -23,18 +23,18 @@
 <style lang="scss">
   .game__playzone {
     position: absolute;
-    top: 7.5dvh;
+    top: 4dvh;
     left: 0;
     display: flex;
     gap: 1dvh;
     width: 100vw;
-    height: 88.5dvh;
+    height: 92dvh;
     padding: 0.5dvh 1dvh;
     & > div {
       outline: 1dvh solid $col-black;
     }
     &-option {
-      width: 30%;
+      width: 25%;
       height: 100%;
     }
     &-center {
