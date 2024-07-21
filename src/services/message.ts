@@ -12,7 +12,7 @@ class Messages {
     this.messages.value = [];
   }
 
-  add(text: string, color: string = 'green', icon: string = 'dollar', time: number = 1000): void {
+  add(text: string, color: string = 'green', icon: string = 'dollar', time: number = 1200): void {
     this.messages.value.push(new MessagesBuilder(text, color, icon, time));
   }
 
@@ -25,6 +25,7 @@ class Messages {
 export default new Messages();
 
 class MessagesBuilder {
+  id: number = Date.now();
   constructor(
     readonly text: string,
     readonly color: string,

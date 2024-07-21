@@ -4,6 +4,11 @@
       <PanelHudHP />
       <PanelHudBoss />
     </div>
+    <div class="hud__left">
+      <PanelHudConnect />
+      <PanelHudMessages />
+    </div>
+    <!-- <div class="hud__right color-grey-l"></div> -->
     <div class="hud__bottom">
       <PanelHudTower />
       <PanelHudEnemies />
@@ -16,6 +21,8 @@
   import PanelHudEnemies from '@/components/Game/Panel/PanelHudEnemies.vue';
   import PanelHudHP from '@/components/Game/Panel/PanelHudHP.vue';
   import PanelHudBoss from '@/components/Game/Panel/PanelHudBoss.vue';
+  import PanelHudConnect from '@/components/Game/Panel/PanelHudConnect.vue';
+  import PanelHudMessages from '@/components/Game/Panel/PanelHudMessages.vue';
 </script>
 
 <style lang="scss">
@@ -59,6 +66,32 @@
         height: calc(25% - 0.25dvh);
         font-size: 0.7rem;
       }
+    }
+    &__left {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 10vw;
+      height: 50%;
+      text-transform: uppercase;
+      transform: translateY(-50%);
+      &-connect {
+        font-size: 0.9rem;
+      }
+      &-messages {
+        & > div {
+          width: 100%;
+          transition: all 0.3s;
+        }
+      }
+    }
+    &__right {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 10vw;
+      height: 50%;
+      transform: translateY(-50%);
     }
     &__bottom {
       position: absolute;
