@@ -4,9 +4,9 @@ import Particles from '@/entities/particles';
 import Statistic from '@/services/statistic';
 import Updates from '@/mechanics/updates';
 import CONST from '@/math/const';
-import { Vector } from '@/math/math';
+import { MyMath, Vector } from '@/math/math';
 import Settings from '@/logic/settings';
-import { computed, Ref, ref } from 'vue';
+import { Ref, ref } from 'vue';
 
 class Mines {
   static #onlyInstance: Mines | null = null;
@@ -28,8 +28,8 @@ class Mines {
 
   tick = (dt: number) => {
     this.mines.value = this.mines.value.filter((mine) => {
-      mine.time.value -= dt;
-      if (mine.time.value <= 0) {
+      mine.tick(dt);
+      if (mine.time <= 0) {
         mine.activated();
         return false;
       }
@@ -46,13 +46,13 @@ class Mines {
 export default new Mines();
 
 class MineBuilder {
-  size = CONST.MINE.SIZE * Settings.scaleSize;
+  size = MyMath.round(CONST.MINE.SIZE * Settings.scaleSize);
   r = this.size / 2;
   x = 0;
   y = 0;
 
-  time = ref(CONST.MINE.LIFETIME);
-  time_progress = computed(() => (this.time.value / CONST.MINE.LIFETIME) * 100);
+  time = CONST.MINE.LIFETIME;
+  time_progress = (this.time / CONST.MINE.LIFETIME) * 100;
 
   s_radius = (Updates.updates['perimeter'].groups['mines'].updates['radius'].count * Settings.scaleSize) / 2;
   s_damage =
@@ -64,6 +64,10 @@ class MineBuilder {
     this.x = x;
     this.y = y;
   }
+  tick = (dt: number) => {
+    this.time -= dt;
+    this.time_progress = (this.time / CONST.MINE.LIFETIME) * 100;
+  };
 
   checkCollision = () => {
     for (let i = 0; i < Enemies.enemies.value.length; i++) {
