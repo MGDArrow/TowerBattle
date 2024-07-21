@@ -40,7 +40,7 @@
   }>();
 
   const lvlbarText = computed(() => {
-    return `${User.username}, уровень ${User.lvl.value.lvl} (${User.lvl.value.exp_lvl} / ${User.lvl.value.exp_next} — ${MyMath.toText(User.lvl.value.percent)}%)`;
+    return `${User.username}, уровень ${User.lvl.value.lvl} (${MyMath.toText(User.lvl.value.exp_lvl)} / ${MyMath.toText(User.lvl.value.exp_next)} — ${MyMath.toText(User.lvl.value.percent)}%)`;
   });
   const lvlbarBar = computed(() => {
     return {
