@@ -3,6 +3,7 @@
     <PanelValuta @setOptions="(e) => setOptions(e)" />
     <PanelPlayzone :options="options" />
     <PanelOptions @setOptions="(e) => setOptions(e)" :options="options" />
+    <PanelHud />
   </div>
 </template>
 
@@ -10,6 +11,7 @@
   import PanelValuta from '@/components/Game/Panel/PanelValuta.vue';
   import PanelPlayzone from '@/components/Game/Panel/PanelPlayzone.vue';
   import PanelOptions from '@/components/Game/Panel/PanelOptions.vue';
+  import PanelHud from '@/components/Game/Panel/PanelHud.vue';
 
   import { TOptionalGame, TOptionalPanelGame } from '@/types/optional';
   import { Ref, ref } from 'vue';
@@ -41,5 +43,7 @@
   .game__panel {
     position: absolute;
     z-index: 98;
+    width: 100%;
+    height: 100%;
   }
 </style>

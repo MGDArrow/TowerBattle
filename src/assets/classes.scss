@@ -130,6 +130,74 @@
     border: $size-border solid $col-purple;
   }
 }
+.border-h {
+  &-white {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-white;
+    }
+  }
+  &-bg {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-bg;
+    }
+  }
+  &-grey {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-grey;
+    }
+  }
+  &-grey-l {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-grey-l;
+    }
+  }
+  &-red {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-red;
+    }
+  }
+  &-orange {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-orange;
+    }
+  }
+  &-yellow {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-yellow;
+    }
+  }
+  &-green {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-green;
+    }
+  }
+  &-turq {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-turq;
+    }
+  }
+  &-blue {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-blue;
+    }
+  }
+  &-purple {
+    transition: $transition-main;
+    &:hover {
+      border: $size-border solid $col-purple;
+    }
+  }
+}
 .frame {
   &-white {
     border: $size-frame solid $col-white;
