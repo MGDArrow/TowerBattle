@@ -3,6 +3,7 @@
     <div class="hud__top">
       <PanelHudHP />
       <PanelHudBoss />
+      <PanelHudBuffs />
     </div>
     <div class="hud__left">
       <PanelHudConnect />
@@ -23,6 +24,7 @@
   import PanelHudBoss from '@/components/Game/Panel/PanelHudBoss.vue';
   import PanelHudConnect from '@/components/Game/Panel/PanelHudConnect.vue';
   import PanelHudMessages from '@/components/Game/Panel/PanelHudMessages.vue';
+  import PanelHudBuffs from '@/components/Game/Panel/PanelHudBuffs.vue';
 </script>
 
 <style lang="scss">
@@ -36,15 +38,17 @@
       position: absolute;
       top: 0;
       display: flex;
+      flex-wrap: wrap;
       gap: 0.5dvh;
       width: 100%;
       font-weight: 800;
       text-transform: uppercase;
       & > div {
         display: flex;
-        flex: 1;
+        flex-grow: 1;
         flex-wrap: wrap;
         justify-content: space-around;
+        width: 0;
         height: max-content;
         max-height: 10dvh;
         padding: 0.5dvh;
