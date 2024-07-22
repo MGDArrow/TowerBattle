@@ -1,13 +1,18 @@
 <template>
   <div class="app-game">
     <GameBase />
-    <GamePanel />
+    <GamePanel @endGame="wantEndGame = true" />
+    <GameOver v-model="wantEndGame" />
   </div>
 </template>
 
 <script setup lang="ts">
   import GameBase from '@/components/Game/GameBase.vue';
+  import GameOver from '@/components/Game/GameOver.vue';
   import GamePanel from '@/components/Game/GamePanel.vue';
+  import { ref } from 'vue';
+
+  const wantEndGame = ref(false);
 </script>
 
 <style lang="scss">

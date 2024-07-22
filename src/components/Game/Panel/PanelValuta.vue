@@ -22,7 +22,9 @@
       <div class="flex-center" :style="lvlbarBar">{{ lvlbarText }}</div>
     </div>
 
-    <div class="flex-center bg-red border-red shadow-h-red" style="cursor: pointer"><VIcon :name="'door'" /></div>
+    <div class="flex-center bg-red border-red shadow-h-red" style="cursor: pointer" @click="emit('endGame')">
+      <VIcon :name="'door'" />
+    </div>
   </div>
 </template>
 
@@ -37,6 +39,7 @@
 
   const emit = defineEmits<{
     setOptions: [value: TOptionalPanelGame];
+    endGame: [];
   }>();
 
   const lvlbarText = computed(() => {

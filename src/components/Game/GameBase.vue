@@ -34,21 +34,15 @@
 
   import { onBeforeMount, onUnmounted } from 'vue';
 
-  // const info = ref(false);
-  // const description = ref(false);
-  // const popup = ref(false);
-  // const go = computed(() => Settings.gameOver.value);
-  const game = Game;
-
   onBeforeMount(() => {
-    game.initGame();
+    Game.initGame();
     document.addEventListener('visibilitychange', pauseDocumentHidden);
   });
 
   onUnmounted(() => {
     gameOver();
     Updates.resetUpdates();
-    clearInterval(game.fpsMetter);
+    clearInterval(Game.fpsMetter);
     document.removeEventListener('visibilitychange', pauseDocumentHidden);
   });
 
@@ -61,13 +55,6 @@
   function gameOver() {
     Settings.endGame();
   }
-
-  // function repeatGame() {
-  //   popup.value = false;
-  //   Settings.gameOver.value = false;
-  //   clearInterval(game.fpsMetter);
-  //   game.initGame();
-  // }
 </script>
 
 <style lang="scss">

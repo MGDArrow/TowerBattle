@@ -1,6 +1,6 @@
 <template>
   <div class="game__panel">
-    <PanelValuta @setOptions="(e) => setOptions(e)" />
+    <PanelValuta @setOptions="(e) => setOptions(e)" @endGame="emit('endGame')" />
     <PanelPlayzone :options="options" />
     <PanelOptions @setOptions="(e) => setOptions(e)" :options="options" />
     <PanelHud @setOptions="(e) => setOptions(e)" />
@@ -18,6 +18,10 @@
   import { TOptionalGame, TOptionalPanelGame } from '@/types/optional';
   import { ComputedRef, provide, Ref, ref } from 'vue';
   import { IUpdate } from '@/types/updates';
+
+  const emit = defineEmits<{
+    endGame: [];
+  }>();
 
   const options: Ref<TOptionalGame> = ref(['Updates', 'Statistic']);
 
