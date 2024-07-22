@@ -1,5 +1,10 @@
 <template>
-  <div class="item" @click.stop="$emit('getLvlUp', finalCoefUpd)">
+  <div
+    class="item"
+    @click.stop="$emit('getLvlUp', finalCoefUpd)"
+    @mouseenter="setDescription(update.description)"
+    @mouseleave="setDescription('')"
+  >
     <UUpdatesItemInfo
       :update="update"
       :сurrentLvlUpdate="сurrentLvlUpdate"
@@ -20,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue';
+  import { computed, ComputedRef, inject, ref } from 'vue';
   import User from '@/logic/user';
   import Updates from '@/mechanics/updates';
   import Tower from '@/entities/tower';
@@ -39,6 +44,10 @@
     getLvlUp: [value: number];
     getFavorite: [];
   }>();
+
+  const { setDescription } = inject('description', {
+    setDescription: (_newDescriprion: string | ComputedRef<string>) => {},
+  });
 
   const isModeMenu = computed(() => props.mode === 'Меню');
   const valuta = computed(() => (isModeMenu.value ? User.valuta.value.coins : Tower.dollars.value));

@@ -4,6 +4,7 @@
     <PanelPlayzone :options="options" />
     <PanelOptions @setOptions="(e) => setOptions(e)" :options="options" />
     <PanelHud @setOptions="(e) => setOptions(e)" />
+    <PanelDescription :description="description" />
   </div>
 </template>
 
@@ -12,9 +13,10 @@
   import PanelPlayzone from '@/components/Game/Panel/PanelPlayzone.vue';
   import PanelOptions from '@/components/Game/Panel/PanelOptions.vue';
   import PanelHud from '@/components/Game/Panel/PanelHud.vue';
+  import PanelDescription from '@/components/Game/Panel/PanelDescription.vue';
 
   import { TOptionalGame, TOptionalPanelGame } from '@/types/optional';
-  import { Ref, ref } from 'vue';
+  import { ComputedRef, provide, Ref, ref } from 'vue';
 
   const options: Ref<TOptionalGame> = ref(['Updates', 'Statistic']);
 
@@ -51,6 +53,13 @@
     }
     if (options.value[0] !== option && options.value[1] !== option) options.value[1] = option;
   }
+
+  let description: Ref<string> | Ref<ComputedRef<string>> = ref('');
+  function setDescription(newDescriprion: string | ComputedRef<string>) {
+    if (typeof newDescriprion === 'string') description.value = newDescriprion;
+    else description.value = newDescriprion;
+  }
+  provide('description', { setDescription });
 </script>
 
 <style lang="scss">
