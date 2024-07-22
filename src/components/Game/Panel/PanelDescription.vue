@@ -4,23 +4,30 @@
     v-if="isDescription"
     :style="{ height: descriptionHeight }"
   >
-    {{ description }}
+    {{ descriptionText }}
   </div>
 </template>
 
 <script setup lang="ts">
   import { computed, ComputedRef } from 'vue';
   import Updates from '@/mechanics/updates';
+  import { IUpdate } from '@/types/updates';
 
   interface Props {
-    description: string | ComputedRef<string>;
+    description: string | ComputedRef<string> | IUpdate;
   }
   const props = defineProps<Props>();
 
   const isDescription = computed(() => props.description !== '');
+
   const descriptionHeight = computed(() =>
     Updates.updates['defence'].groups['kit'].updates['percent'].lvl_max > 0 ? '9.3dvh' : '7.9dvh',
   );
+
+  const descriptionText = computed(() => {
+    if (props.description?.description) return props.description?.description;
+    return props.description;
+  });
 </script>
 
 <style lang="scss">

@@ -2,7 +2,7 @@
   <div
     class="item"
     @click.stop="$emit('getLvlUp', finalCoefUpd)"
-    @mouseenter="setDescription(update.description)"
+    @mouseenter="setDescription(update)"
     @mouseleave="setDescription('')"
   >
     <UUpdatesItemInfo
@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ComputedRef, inject, ref } from 'vue';
+  import { computed, inject, ref } from 'vue';
   import User from '@/logic/user';
   import Updates from '@/mechanics/updates';
   import Tower from '@/entities/tower';
@@ -46,7 +46,7 @@
   }>();
 
   const { setDescription } = inject('description', {
-    setDescription: (_newDescriprion: string | ComputedRef<string>) => {},
+    setDescription: (_newDescriprion: string | IUpdate) => {},
   });
 
   const isModeMenu = computed(() => props.mode === 'Меню');

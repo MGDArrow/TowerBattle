@@ -17,6 +17,7 @@
 
   import { TOptionalGame, TOptionalPanelGame } from '@/types/optional';
   import { ComputedRef, provide, Ref, ref } from 'vue';
+  import { IUpdate } from '@/types/updates';
 
   const options: Ref<TOptionalGame> = ref(['Updates', 'Statistic']);
 
@@ -54,10 +55,9 @@
     if (options.value[0] !== option && options.value[1] !== option) options.value[1] = option;
   }
 
-  let description: Ref<string> | Ref<ComputedRef<string>> = ref('');
-  function setDescription(newDescriprion: string | ComputedRef<string>) {
-    if (typeof newDescriprion === 'string') description.value = newDescriprion;
-    else description.value = newDescriprion;
+  let description: Ref<string> | Ref<ComputedRef<string>> | Ref<IUpdate> = ref('');
+  function setDescription(newDescriprion: string | ComputedRef<string> | IUpdate) {
+    description.value = newDescriprion;
   }
   provide('description', { setDescription });
 </script>
