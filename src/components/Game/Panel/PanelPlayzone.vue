@@ -3,7 +3,9 @@
     <div class="game__playzone-option shadow-h-orange" v-if="options[0] !== ''">
       <PanelPlayzoneOptions :options="options[0]" />
     </div>
-    <div class="game__playzone-center frame-blue shadow-h-blue"></div>
+    <div class="game__playzone-center frame-blue shadow-h-blue">
+      <PanelPlayzonePause />
+    </div>
     <div class="game__playzone-option shadow-h-turq" v-if="options[1] !== ''">
       <PanelPlayzoneOptions :options="options[1]" />
     </div>
@@ -13,6 +15,7 @@
 <script setup lang="ts">
   import { TOptionalGame } from '@/types/optional';
   import PanelPlayzoneOptions from '@/components/Game/Panel/PanelPlayzoneOptions.vue';
+  import PanelPlayzonePause from '@/components/Game/Panel/PanelPlayzonePause.vue';
 
   interface Props {
     options: TOptionalGame;
