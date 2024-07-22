@@ -25,7 +25,7 @@ class User {
   static #onlyInstance: User | null = null;
 
   public username: string = 'MGDArrow';
-  public exp: Ref<number> = ref(1_000_000_000);
+  public exp: Ref<number> = ref(1);
   public lvl = computed(() => getLvl(this.exp.value));
   public valuta = ref({
     coins: 50000000000,

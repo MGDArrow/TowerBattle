@@ -16,7 +16,7 @@ class Settings {
   public scaleSpead: ComputedRef<number> = computed(() => this.scaleSize);
 
   //** Game Settings **//
-  public lvl: Ref<number> = ref(1);
+  public lvl: Ref<number> = ref(30);
   public stage = computed(() => Math.ceil(this.lvl.value / 3));
 
   public waveInit: number = CONST.GAME.WAVE_INIT;
