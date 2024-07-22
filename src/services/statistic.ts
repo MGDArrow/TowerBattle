@@ -21,11 +21,12 @@ export default class Statistic {
       kill_boss: new StatisticBuilder('Убийства', 'Убито боссов', 'text'),
       kill_enemies: new StatisticBuilder('Убийства', 'Убито всего', 'green'),
       // * Урон
-      damage_post: new StatisticBuilder('Урон', 'Урона нанесено', 'green', 'sword'),
+      damage_post: new StatisticBuilder('Урон', 'Нанесено башней', 'green', 'sword'),
       damage_spikes: new StatisticBuilder('Урон', 'Нанесено шипами', 'green', 'spikes-enemy'),
       damage_mines: new StatisticBuilder('Урон', 'Нанесено минами', 'green', 'mines-damage'),
       damage_balls: new StatisticBuilder('Урон', 'Нанесено шарами', 'green', 'balls'),
-      damage_get: new StatisticBuilder('Урон', 'Урона получено', 'red', 'axe'),
+      damage_all: new StatisticBuilder('Урон', 'Всего нанесено', 'green', 'sword'),
+      damage_get: new StatisticBuilder('Урон', 'Всего получено', 'red', 'axe'),
       // * Здоровье
       hp_regen: new StatisticBuilder('Здоровье', 'Восстановлено регеном', 'green', 'regen'),
       hp_vampiric: new StatisticBuilder('Здоровье', 'Восстановлено вампиризмом', 'green', 'bat'),
@@ -35,13 +36,16 @@ export default class Statistic {
       dollars_enemies: new StatisticBuilder('Валюта', 'Получено за врагов', 'green', 'dollar'),
       dollars_waves: new StatisticBuilder('Валюта', 'Получено за волны', 'green', 'dollar'),
       dollars_deposit: new StatisticBuilder('Валюта', 'Получено с депозита', 'green', 'dollar'),
+      dollars_all: new StatisticBuilder('Валюта', 'Получено всего', 'green', 'dollar'),
       dollars_buying: new StatisticBuilder('Валюта', 'Потрачено валюты', 'red', 'dollar'),
       // * Монеты
       coins_enemies: new StatisticBuilder('Монеты', 'Получено за врагов', 'green', 'coins'),
       coins_waves: new StatisticBuilder('Монеты', 'Получено за волны', 'green', 'coins'),
+      coins_all: new StatisticBuilder('Монеты', 'Получено всего', 'green', 'coins'),
       // * Опыт
       exp_enemies: new StatisticBuilder('Опыт', 'Получено за врагов', 'green', 'exp'),
       exp_waves: new StatisticBuilder('Опыт', 'Получено за волны', 'green', 'exp'),
+      exp_all: new StatisticBuilder('Опыт', 'Получено всего', 'green', 'exp'),
       // * Улучшения
       updates_crit: new StatisticBuilder('Улучшения', 'Критических атак', 'text', 'crit-proc'),
       updates_multicrit: new StatisticBuilder('Улучшения', 'Мультикритических атак', 'text', 'multicrit-percent'),
@@ -60,12 +64,21 @@ export default class Statistic {
       updates_free_money: new StatisticBuilder('Улучшения', 'Бесплатных улучшений экономики', 'text', 'freeup-money'),
     };
 
+    Statistic.statistic.value.damage_persec = new StatisticBuilderPerSec(
+      'Урон',
+      'Урон в секунду',
+      'yellow',
+      'sword',
+      Statistic.statistic.value.damage_all,
+      Statistic.statistic.value.game_time,
+    );
+
     Statistic.statistic.value.dollars_persec = new StatisticBuilderPerSec(
       'Валюта',
       'Валюты в секунду',
       'yellow',
       'dollar',
-      [Statistic.statistic.value.dollars_enemies, Statistic.statistic.value.dollars_waves],
+      Statistic.statistic.value.dollars_all,
       Statistic.statistic.value.game_time,
     );
 
@@ -74,7 +87,16 @@ export default class Statistic {
       'Монет в секунду',
       'yellow',
       'coins',
-      [Statistic.statistic.value.coins_enemies, Statistic.statistic.value.coins_waves],
+      Statistic.statistic.value.coins_all,
+      Statistic.statistic.value.game_time,
+    );
+
+    Statistic.statistic.value.exp_persec = new StatisticBuilderPerSec(
+      'Опыт',
+      'Опыт в секунду',
+      'yellow',
+      'exp',
+      Statistic.statistic.value.exp_all,
       Statistic.statistic.value.game_time,
     );
   }
@@ -125,11 +147,11 @@ class StatisticBuilderPerSec {
     description: string,
     color = 'green',
     icon = '',
-    val: [StatisticBuilder, StatisticBuilder],
+    value: StatisticBuilder,
     time: StatisticBuilder,
   ) {
     this._count = computed(() => {
-      return (val[0]._count + val[1]._count) / (time._count / 1000);
+      return toValue(value._count) / (toValue(time._count) / 1000);
     });
     this.groupe = groupe;
     this.description = description;

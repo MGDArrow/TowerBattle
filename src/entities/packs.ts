@@ -119,5 +119,6 @@ class Deposit extends BasePack {
     Messages.add(`+${MyMath.toText(this.addDollars, 3)}`);
     Particles.newParticles('Депозит', this.x, this.y);
     Statistic.inc('dollars_deposit', this.addDollars);
+    Statistic.inc('dollars_all', this.addDollars);
   };
 }

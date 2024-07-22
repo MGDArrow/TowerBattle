@@ -92,6 +92,7 @@ class MineBuilder {
       if (!isCollision) return;
       enemy.getDamage(this.s_damage);
       Statistic.inc('damage_mines', this.s_damage);
+      Statistic.inc('damage_all', this.s_damage);
     });
   };
 }

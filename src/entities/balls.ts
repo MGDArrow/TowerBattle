@@ -107,5 +107,6 @@ class BallBuilder {
     enemy.u_balls = 1000;
     enemy.getDamage(damage);
     Statistic.inc('damage_balls', damage);
+    Statistic.inc('damage_all', damage);
   };
 }

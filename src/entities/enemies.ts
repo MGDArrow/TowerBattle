@@ -110,6 +110,7 @@ class BaseEnemy {
   getDamage = (damage: number) => {
     this.s_hp -= damage;
     Statistic.inc('damage_post', damage);
+    Statistic.inc('damage_all', damage);
   };
 
   death() {
@@ -133,8 +134,11 @@ class BaseEnemy {
 
     //** Обновляем статистику **//
     Statistic.inc('dollars_enemies', addDollars);
+    Statistic.inc('dollars_all', addDollars);
     Statistic.inc('coins_enemies', addCoins);
+    Statistic.inc('coins_all', addCoins);
     Statistic.inc('exp_enemies', addExp);
+    Statistic.inc('exp_all', addExp);
     Statistic.inc('kill_enemies');
   }
 }

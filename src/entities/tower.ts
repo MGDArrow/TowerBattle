@@ -117,6 +117,7 @@ class Tower {
     }
     enemy.getDamage(damage);
     Statistic.inc('damage_spikes', damage);
+    Statistic.inc('damage_all', damage);
   };
 }
 

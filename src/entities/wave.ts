@@ -80,8 +80,11 @@ class Waves {
     User.addExp(addExp);
 
     Statistic.inc('dollars_waves', addDollars);
+    Statistic.inc('dollars_all', addDollars);
     Statistic.inc('coins_waves', addCoins);
+    Statistic.inc('coins_all', addCoins);
     Statistic.inc('exp_waves', addExp);
+    Statistic.inc('exp_all', addExp);
 
     Messages.add(`+${MyMath.toText(addDollars, 3)}`);
     Messages.add(`+${MyMath.toText(addCoins, 3)}`, 'yellow', 'coins');
