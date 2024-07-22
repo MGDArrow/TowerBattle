@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { computed, ref, watch } from 'vue';
   import Settings from '@/logic/settings';
   import Game from '@/logic/game';
   import Statistic from '@/services/statistic';
@@ -47,6 +47,12 @@
   const emit = defineEmits();
 
   const isEndGame = ref(false);
+
+  const isTowerDied = computed(() => Settings.gameOver.value);
+
+  watch(isTowerDied, (newVal) => {
+    if (newVal) endGame();
+  });
 
   function endGame() {
     wantEndGame.value = false;
