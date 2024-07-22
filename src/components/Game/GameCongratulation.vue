@@ -1,5 +1,5 @@
 <template>
-  <VPopup v-model="congratulations_lvl">
+  <VPopup v-model="congratulations_open">
     <h1>Поздравляем!</h1>
     <div class="congratulations__lvl color-orange">Вы получили {{ congratulations_lvl }}-й уровень!</div>
     <div class="congratulations__title color-blue">Ваша награда:</div>
@@ -39,6 +39,7 @@
   const userLvl = computed(() => User.lvl.value.lvl);
 
   const congratulations_lvl = ref(0);
+  const congratulations_open = ref(false);
 
   const congratulations_lvl_coins = computed(() => 1000 * (5 * (congratulations_lvl.value - 1)));
 
@@ -50,7 +51,6 @@
         if (Updates.updates[direction].groups[groupe].lvl_access === congratulations_lvl.value) {
           update = Updates.updates[direction].groups[groupe];
           color = Updates.updates[direction].color;
-          console.log(color);
           break;
         }
       }
@@ -61,11 +61,12 @@
 
   watch(userLvl, (newLvl) => {
     congratulations_lvl.value = newLvl;
+    congratulations_open.value = true;
     User.updateCoins(congratulations_lvl_coins.value);
     User.updateDiamonds(10 * newLvl);
     User.updateUltimates(5 * newLvl);
   });
-  watch(congratulations_lvl, () => {
+  watch(congratulations_open, () => {
     Settings.gameSpeadPause();
   });
 </script>
