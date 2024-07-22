@@ -70,6 +70,7 @@
     justify-content: start !important;
     width: 0;
     height: 3dvh;
+    padding: 0 !important;
     & > div {
       position: relative;
       width: 3dvh;

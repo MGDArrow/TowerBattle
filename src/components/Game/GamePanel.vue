@@ -3,7 +3,7 @@
     <PanelValuta @setOptions="(e) => setOptions(e)" />
     <PanelPlayzone :options="options" />
     <PanelOptions @setOptions="(e) => setOptions(e)" :options="options" />
-    <PanelHud />
+    <PanelHud @setOptions="(e) => setOptions(e)" />
   </div>
 </template>
 
@@ -18,7 +18,21 @@
 
   const options: Ref<TOptionalGame> = ref(['Updates', 'Statistic']);
 
+  let optionTemp: TOptionalGame = ['', ''];
+
   function setOptions(option: TOptionalPanelGame): void {
+    //** Башня и враги **//
+    if (option === 'Tower' || options.value[0] === 'Tower') {
+      if (options.value[0] !== 'Tower') {
+        optionTemp = options.value;
+        options.value = ['Tower', 'Enemies'];
+      } else {
+        options.value = optionTemp;
+        optionTemp = ['', ''];
+      }
+      return;
+    }
+
     //** Отмена **//
     if (options.value[0] === option || options.value[1] === option) {
       if (options.value[0] === option) options.value[0] = '';

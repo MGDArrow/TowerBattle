@@ -11,8 +11,8 @@
     </div>
     <!-- <div class="hud__right color-grey-l"></div> -->
     <div class="hud__bottom">
-      <PanelHudTower />
-      <PanelHudEnemies />
+      <PanelHudTower @click="emit('setOptions', 'Tower')" />
+      <PanelHudEnemies @click="emit('setOptions', 'Tower')" />
     </div>
   </div>
 </template>
@@ -25,6 +25,11 @@
   import PanelHudConnect from '@/components/Game/Panel/PanelHudConnect.vue';
   import PanelHudMessages from '@/components/Game/Panel/PanelHudMessages.vue';
   import PanelHudBuffs from '@/components/Game/Panel/PanelHudBuffs.vue';
+  import { TOptionalPanelGame } from '@/types/optional';
+
+  const emit = defineEmits<{
+    setOptions: [value: TOptionalPanelGame];
+  }>();
 </script>
 
 <style lang="scss">
