@@ -1,8 +1,13 @@
 import { MyMath } from '@/math/math';
-import { computed, Ref, ref } from 'vue';
+import { TStatisticGroupes } from '@/types/statistic';
+import { computed, ComputedRef, Ref, ref, toValue } from 'vue';
+
+interface IStatistic {
+  [key: string]: StatisticBuilder | StatisticBuilderPerSec;
+}
 
 export default class Statistic {
-  static statistic = ref({});
+  static statistic: Ref<IStatistic> = ref({});
 
   static init() {
     this.statistic.value = {
@@ -14,7 +19,7 @@ export default class Statistic {
       kill_tank: new StatisticBuilder('Убийства', 'Убито танков', 'text'),
       kill_shooter: new StatisticBuilder('Убийства', 'Убито стрелков', 'text'),
       kill_boss: new StatisticBuilder('Убийства', 'Убито боссов', 'text'),
-      kill_enemies: new StatisticBuilder('Убийства', 'Убито всего', 'text'),
+      kill_enemies: new StatisticBuilder('Убийства', 'Убито всего', 'green'),
       // * Урон
       damage_post: new StatisticBuilder('Урон', 'Урона нанесено', 'green', 'sword'),
       damage_spikes: new StatisticBuilder('Урон', 'Нанесено шипами', 'green', 'spikes-enemy'),
@@ -54,25 +59,45 @@ export default class Statistic {
       ),
       updates_free_money: new StatisticBuilder('Улучшения', 'Бесплатных улучшений экономики', 'text', 'freeup-money'),
     };
+
+    Statistic.statistic.value.dollars_persec = new StatisticBuilderPerSec(
+      'Валюта',
+      'Валюты в секунду',
+      'yellow',
+      'dollar',
+      [Statistic.statistic.value.dollars_enemies, Statistic.statistic.value.dollars_waves],
+      Statistic.statistic.value.game_time,
+    );
+
+    Statistic.statistic.value.coins_persec = new StatisticBuilderPerSec(
+      'Монеты',
+      'Монет в секунду',
+      'yellow',
+      'coins',
+      [Statistic.statistic.value.coins_enemies, Statistic.statistic.value.coins_waves],
+      Statistic.statistic.value.game_time,
+    );
   }
 
-  static inc(point, inc = 1) {
+  static inc(point: string, inc: number = 1) {
     this.statistic.value[point].add(inc);
   }
 }
 
 class StatisticBuilder {
-  private _count: Ref<number>;
-  public groupe: string;
+  public _count: Ref<number>;
+  public groupe: TStatisticGroupes;
   public description: string;
   public color: string;
-  public icon: string | boolean;
-  constructor(groupe: string, description: string, color = 'green', icon = false) {
+  public icon: string;
+  public perSec: boolean;
+  constructor(groupe: TStatisticGroupes, description: string, color = 'green', icon = '') {
     this._count = ref(0);
     this.description = description;
     this.groupe = groupe;
     this.color = color;
     this.icon = icon;
+    this.perSec = false;
   }
 
   add = (inc: number) => {
@@ -80,7 +105,7 @@ class StatisticBuilder {
   };
 
   get count(): string {
-    return MyMath.toText(this._count);
+    return MyMath.toText(toValue(this._count));
   }
 
   set count(inc: number) {
@@ -88,36 +113,42 @@ class StatisticBuilder {
   }
 }
 
-Statistic.statistic.value.dollars_persec = StatisticPerSec(
-  'Валюта',
-  'Валюты в секунду',
-  'text',
-  'dollar',
-  [Statistic.statistic.value.dollars_enemies, Statistic.statistic.value.dollars_waves],
-  Statistic.statistic.value.game_time,
-);
+class StatisticBuilderPerSec {
+  private _count: ComputedRef<number>;
+  public groupe: TStatisticGroupes;
+  public description: string;
+  public color: string;
+  public icon: string;
+  public perSec: boolean;
+  constructor(
+    groupe: TStatisticGroupes,
+    description: string,
+    color = 'green',
+    icon = '',
+    val: [StatisticBuilder, StatisticBuilder],
+    time: StatisticBuilder,
+  ) {
+    this._count = computed(() => {
+      return (val[0]._count + val[1]._count) / (time._count / 1000);
+    });
+    this.groupe = groupe;
+    this.description = description;
+    this.color = color;
+    this.icon = icon;
+    this.perSec = true;
+  }
 
-Statistic.statistic.value.coins_persec = StatisticPerSec(
-  'Монеты',
-  'Монет в секунду',
-  'text',
-  'coins',
-  [Statistic.statistic.value.coins_enemies, Statistic.statistic.value.coins_waves],
-  Statistic.statistic.value.game_time,
-);
-
-function StatisticPerSec(groupe, description, color = 'green', icon = false, val, time) {
-  return {
-    groupe,
-    description,
-    color,
-    icon,
-    perSec: true,
-    _count: computed(() => {
-      return MyMath.round((val[0].count + val[1].count) / (time._count / 1000), 1);
-    }),
-    get count() {
-      return this._count;
-    },
+  add = (_inc: number) => {
+    return;
   };
+
+  get count(): string {
+    let endCount = MyMath.toText(toValue(this._count), 1);
+    if (!this._count) endCount = '0';
+    return `${endCount}`;
+  }
+
+  set count(_inc: number) {
+    return;
+  }
 }

@@ -25,7 +25,7 @@ class Messages {
 export default new Messages();
 
 class MessagesBuilder {
-  id: number = Date.now();
+  id: number = Date.now() + Math.random();
   constructor(
     readonly text: string,
     readonly color: string,

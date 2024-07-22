@@ -64,11 +64,11 @@
       cursor: pointer;
     }
     &__count {
-      font-size: 4rem;
+      font-size: 3.2rem;
       text-align: center;
     }
     &__icon {
-      font-size: 8rem;
+      font-size: 7rem;
       text-align: center;
     }
     &__price {
