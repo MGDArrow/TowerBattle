@@ -7,6 +7,7 @@ import { MyMath } from '@/math/math';
 import Messages from '@/services/message';
 import Statistic from '@/services/statistic';
 import Settings from '@/logic/settings';
+import Stages from '@/mechanics/stages';
 import User from '@/logic/user';
 import { Ref, ref } from 'vue';
 import { IEnemiesParams } from '@/types/enemies';
@@ -31,7 +32,7 @@ class Waves {
   }
 
   init() {
-    this.lvl = Settings.lvl.value;
+    this.lvl = Stages.lvl.value;
     this.wave.value = 0;
     this.inite.value = Settings.waveInit;
     this.long.value = Settings.waveLong;

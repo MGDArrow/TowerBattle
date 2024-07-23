@@ -16,8 +16,6 @@ class Settings {
   public scaleSpead: ComputedRef<number> = computed(() => this.scaleSize);
 
   //** Game Settings **//
-  public lvl: Ref<number> = ref(30);
-  public stage = computed(() => Math.ceil(this.lvl.value / 3));
 
   public waveInit: number = CONST.GAME.WAVE_INIT;
   public waveLong: number = CONST.GAME.WAVE_LONG;
@@ -31,11 +29,6 @@ class Settings {
     if (Settings.#onlyInstance) return Settings.#onlyInstance;
     Settings.#onlyInstance = this;
   }
-
-  changeLvl = (inc: number): void => {
-    if (inc === -1 && this.lvl.value > 1) this.lvl.value += inc;
-    if (inc === 1 && this.lvl.value < 15) this.lvl.value += inc;
-  };
 
   newGame = (): void => {
     this.gameOver.value = false;

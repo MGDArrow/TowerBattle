@@ -10,7 +10,7 @@
     <h1>Игра завершена</h1>
     <div class="game__end-statistic">
       <div>
-        <span class="color-blue">Уровень:</span><span>{{ Settings.lvl }}</span>
+        <span class="color-blue">Уровень:</span><span>{{ Stages.lvl }}</span>
       </div>
       <div><span class="color-blue">Заходов:</span><span>—</span></div>
       <div>
@@ -42,6 +42,7 @@
   import Game from '@/logic/game';
   import Statistic from '@/services/statistic';
   import Wave from '@/entities/wave';
+  import Stages from '@/mechanics/stages';
 
   const wantEndGame = defineModel<boolean>();
   const emit = defineEmits();

@@ -3,28 +3,32 @@
     <div class="home-play__info border-orange shadow-orange bg-bg">
       <div class="home-play__arrow flex-center bg-h-grey" @click="changeLvl(-1)"><VIcon :name="'angle-left'" /></div>
       <div class="home-play__lvl bg-h-grey" @click="updateOptionalPanel('Stages')">
-        <div class="home-play__lvl-current">Уровень: {{ Settings.lvl.value }} | Этап: {{ Settings.stage.value }}</div>
+        <div class="home-play__lvl-current">Уровень: {{ Stages.lvl.value }} | Этап: {{ Stages.stage.value }}</div>
         <div class="home-play__lvl-info lvlinfo">
-          <div class="lvlinfo__max">
-            Максимум: <br />
-            2000 волн
-          </div>
-          <div class="lvlinfo__entry">Заходы: <br />100 заходов</div>
+          <div v-if="Stages.isAccess.value">Максимум: <br />{{ Stages.waves.value }} волн</div>
+          <div v-else>Всего волн: <br />{{ Stages.user_access.value }} волн</div>
+          <div v-if="Stages.isAccess.value">Заходы: <br />{{ Stages.entries.value }} заходов</div>
+          <div v-else>Необходимо волн: <br />{{ Stages.access.value }} волн</div>
         </div>
       </div>
       <div class="home-play__arrow flex-center bg-h-grey" @click="changeLvl(1)"><VIcon :name="'angle-right'" /></div>
     </div>
-    <router-link :to="{ name: 'Game' }" class="home-play__btn border-blue shadow-blue bg-bg bg-h-blue flex-center">
+    <router-link
+      v-if="Stages.isAccess.value"
+      :to="{ name: 'Game' }"
+      class="home-play__btn border-blue shadow-blue bg-bg bg-h-blue flex-center"
+    >
       Начать игру
     </router-link>
+    <div v-else class="home-play__btn border-red shadow-red bg-bg bg-h-red flex-center">Нет доступа</div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import Settings from '@/logic/settings';
+  import Stages from '@/mechanics/stages';
 
-  function changeLvl(inc: number): void {
-    Settings.changeLvl(inc);
+  function changeLvl(inc: -1 | 1): void {
+    Stages.changeLvl(inc);
   }
 
   import { inject } from 'vue';

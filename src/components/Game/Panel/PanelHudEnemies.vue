@@ -1,6 +1,6 @@
 <template>
   <div class="bg-bg border-grey border-h-red shadow-h-red">
-    <div class="hud__bottom-stat flex-center"><VIcon :name="'wave'" /> Уровень: {{ Settings.lvl }}</div>
+    <div class="hud__bottom-stat flex-center"><VIcon :name="'wave'" /> Уровень: {{ Stages.lvl }}</div>
     <div class="hud__bottom-stat flex-center"><VIcon :name="'time'" /> Волна: {{ Wave.wave }}</div>
     <div class="hud__bottom-bar" :class="`border-${wavesBorder}`">
       <div class="flex-center" :style="wavesTimer">
@@ -20,6 +20,7 @@
 <script setup lang="ts">
   import Settings from '@/logic/settings';
   import Wave from '@/entities/wave';
+  import Stages from '@/mechanics/stages';
   import { MyMath } from '@/math/math';
   import { computed } from 'vue';
 

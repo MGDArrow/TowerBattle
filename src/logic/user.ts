@@ -1,6 +1,8 @@
 /* eslint-disable no-mixed-operators */
 import { computed, Ref, ref } from 'vue';
 import { MyMath } from '@/math/math';
+import { getStageUserDefault } from '@/upgrades/stages';
+import { IStageUser } from '@/types/stages';
 
 // 0.4*х**3 + 40.4*x**2 + 396*x
 const lvlFn = (lvl: number): number => MyMath.roundTo(2 * lvl ** 3 + 50.5 * lvl ** 2 + 396 * lvl, 10);
@@ -34,6 +36,7 @@ class User {
     tickets: 0,
     awards: 0,
   });
+  public stages: Ref<IStageUser> = ref(getStageUserDefault());
 
   constructor() {
     if (User.#onlyInstance) return User.#onlyInstance;
