@@ -1,8 +1,7 @@
-export type TStageAwardType = 'Coins' | 'Diamonds' | 'Ultimate';
+export type TStageAwardType = 'coins' | 'diamond' | 'ultimate';
 export interface IStageAwardPoint {
   count: number;
   type: TStageAwardType;
-  received: boolean;
 }
 export interface IStageAwardWave {
   left: IStageAwardPoint;
@@ -74,6 +73,8 @@ export interface IStageUserAwardLvl {
   4000: [boolean, boolean];
   5000: [boolean, boolean];
 }
+
+export type TStageLvlWaves = keyof IStageUserAwardLvl;
 export interface IStageUser {
   1: {
     max: number;

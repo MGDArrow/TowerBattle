@@ -1,5 +1,6 @@
 import User from '@/logic/user';
-import { IStageUser } from '@/types/stages';
+import { IStageAwardLvl, IStageUser } from '@/types/stages';
+import { STAGE_AWARDS } from '@/upgrades/stages';
 import { computed, Ref, ref } from 'vue';
 
 class Stages {
@@ -12,6 +13,7 @@ class Stages {
   public entries = computed(() => User.stages.value[this.lvl.value].entries);
   public user_access = computed(() => this.getUserAccessLvl());
   public isAccess = computed(() => this.user_access.value >= this.access.value);
+  public awards = ref(STAGE_AWARDS);
 
   constructor() {
     if (Stages.#onlyInstance) return Stages.#onlyInstance;
@@ -30,6 +32,16 @@ class Stages {
     }
     return userAllStagesLvl;
   }
+
+  getAwardList(): IStageAwardLvl {
+    return this.awards.value[this.lvl.value];
+  }
+
+  getUserAwards() {
+    return User.stages.value[this.lvl.value].awards;
+  }
+
+  // Синхронизировать awards с игроком
 }
 
 export default new Stages();

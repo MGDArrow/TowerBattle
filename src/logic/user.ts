@@ -2,7 +2,8 @@
 import { computed, Ref, ref } from 'vue';
 import { MyMath } from '@/math/math';
 import { getStageUserDefault } from '@/upgrades/stages';
-import { IStageUser } from '@/types/stages';
+import { IStageUser, TStageAwardType, TStageLvlWaves } from '@/types/stages';
+import Stages from '@/mechanics/stages';
 
 // 0.4*х**3 + 40.4*x**2 + 396*x
 const lvlFn = (lvl: number): number => MyMath.roundTo(2 * lvl ** 3 + 50.5 * lvl ** 2 + 396 * lvl, 10);
@@ -58,6 +59,14 @@ class User {
   addExp = (exp: number): void => {
     this.exp.value += exp;
   };
+
+  getStagesAward(wave: TStageLvlWaves, count: number, type: TStageAwardType, side: 0 | 1) {
+    const stageLvlCount = Stages.lvl.value;
+    this.stages.value[stageLvlCount].awards[wave][side] = true;
+    if (type === 'coins') this.updateCoins(count);
+    if (type === 'diamond') this.updateDiamonds(count);
+    if (type === 'ultimate') this.updateUltimates(count);
+  }
 }
 
 export default new User();
