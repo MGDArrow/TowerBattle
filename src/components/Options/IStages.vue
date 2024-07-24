@@ -3,25 +3,26 @@
     <h1 class="bg-grey-l">Уровни</h1>
     <div class="stages__title">Уровень {{ Stages.lvl.value }}</div>
     <div v-if="Stages.isAccess.value" class="stages__count bg-blue border-white shadow-blue">
-      Волны {{ Stages.waves.value }}
+      Волны {{ Stages.maxWaves.value }}
+      <span>{{ Stages.entries.value }} заходов</span>
     </div>
-    <div v-else class="stages__count bg-red shadow-red">Волны {{ Stages.waves.value }}</div>
+    <div v-else class="stages__count bg-red shadow-red">Волны 0</div>
     <div v-if="Stages.isAccess.value" class="options__stages-body stages scroll-grey-l">
       <div class="stages__point" v-for="(point, wave, index) in awards" :key="wave">
-        <div :style="getAwardLineStyle(wave, Stages.waves.value, index)"></div>
+        <div :style="getAwardLineStyle(wave, Stages.maxWaves.value, index)"></div>
         <div
           class="flex-center bg-grey border-grey-l"
-          :class="{ 'bg-blue border-white shadow-blue': wave <= Stages.waves.value }"
+          :class="{ 'bg-blue border-white shadow-blue': wave <= Stages.maxWaves.value }"
         >
           {{ wave }}
         </div>
         <div
           class="stages__award"
           @click.stop="
-            getAward(wave, Stages.waves.value, point.left.count, point.left.type, userStagesAwards[wave][0], 0)
+            getAward(wave, Stages.maxWaves.value, point.left.count, point.left.type, userStagesAwards[wave][0], 0)
           "
         >
-          <div :style="getColorAward(wave, Stages.waves.value, point.left.type, userStagesAwards[wave][0])">
+          <div :style="getColorAward(wave, Stages.maxWaves.value, point.left.type, userStagesAwards[wave][0])">
             <div><VIcon :name="point.left.type" /></div>
             <div>{{ point.left.count }} {{ pointAwardText(point.left.type) }}</div>
           </div>
@@ -30,10 +31,10 @@
         <div
           class="stages__award"
           @click.stop="
-            getAward(wave, Stages.waves.value, point.right.count, point.right.type, userStagesAwards[wave][1], 1)
+            getAward(wave, Stages.maxWaves.value, point.right.count, point.right.type, userStagesAwards[wave][1], 1)
           "
         >
-          <div :style="getColorAward(wave, Stages.waves.value, point.right.type, userStagesAwards[wave][1])">
+          <div :style="getColorAward(wave, Stages.maxWaves.value, point.right.type, userStagesAwards[wave][1])">
             <div><VIcon :name="point.right.type" /></div>
             <div>{{ point.right.count }} {{ pointAwardText(point.right.type) }}</div>
           </div>
@@ -65,7 +66,12 @@
 
   function getAwardLineStyle(wave: number, max: number, index: number) {
     if (+wave <= max) return { background: 'var(--col-blue)' };
-    if (index === 0 || max < +Object.entries(awards.value)[index - 1][0]) return { background: 'var(--col-grey)' };
+    if (index === 0) {
+      return {
+        background: `linear-gradient(to bottom, var(--col-blue) ${(max / +Object.entries(awards.value)[index][0]) * 100}%, var(--col-grey) 0%)`,
+      };
+    }
+    if (max < +Object.entries(awards.value)[index - 1][0]) return { background: 'var(--col-grey)' };
 
     const lastWave = +Object.entries(awards.value)[index - 1][0];
     const needWave = wave - lastWave;
@@ -140,6 +146,10 @@
       padding: 2dvh;
       font-size: 2rem;
       text-align: center;
+      & > span {
+        display: block;
+        font-size: 1.2rem;
+      }
     }
     &__point {
       position: relative;

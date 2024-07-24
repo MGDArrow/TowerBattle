@@ -5,7 +5,7 @@
       <div class="home-play__lvl bg-h-grey" @click="updateOptionalPanel('Stages')">
         <div class="home-play__lvl-current">Уровень: {{ Stages.lvl.value }} | Этап: {{ Stages.stage.value }}</div>
         <div class="home-play__lvl-info lvlinfo">
-          <div v-if="Stages.isAccess.value">Максимум: <br />{{ Stages.waves.value }} волн</div>
+          <div v-if="Stages.isAccess.value">Максимум: <br />{{ Stages.maxWaves.value }} волн</div>
           <div v-else>Всего волн: <br />{{ Stages.user_access.value }} волн</div>
           <div v-if="Stages.isAccess.value">Заходы: <br />{{ Stages.entries.value }} заходов</div>
           <div v-else>Необходимо волн: <br />{{ Stages.access.value }} волн</div>

@@ -12,11 +12,15 @@
       <div>
         <span class="color-blue">Уровень:</span><span>{{ Stages.lvl }}</span>
       </div>
-      <div><span class="color-blue">Заходов:</span><span>—</span></div>
+      <div>
+        <span class="color-blue">Заходов:</span><span>{{ Stages.entries }}</span>
+      </div>
       <div>
         <span class="color-blue">Волны:</span><span>{{ Wave.wave }}</span>
       </div>
-      <div><span class="color-blue">Луший результат:</span><span>—</span></div>
+      <div>
+        <span class="color-blue">Луший результат:</span><span>{{ Stages.maxWaves }}</span>
+      </div>
       <div>
         <span class="color-blue">Всего убито:</span><span>{{ Statistic.statistic.value.kill_enemies.count }}</span>
       </div>

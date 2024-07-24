@@ -266,7 +266,7 @@ export const STAGE_AWARDS: IStageAwar = {
 
 function getStageUserAward(): IStageUserAwardLvl {
   return {
-    10: [true, false],
+    10: [false, false],
     20: [false, false],
     30: [false, false],
     40: [false, false],
@@ -297,12 +297,12 @@ function getStageUserAward(): IStageUserAwardLvl {
 export function getStageUserDefault(): IStageUser {
   return {
     1: {
-      max: 55,
+      max: 0,
       entries: 0,
       awards: getStageUserAward(),
     },
     2: {
-      max: 23,
+      max: 0,
       entries: 0,
       awards: getStageUserAward(),
     },

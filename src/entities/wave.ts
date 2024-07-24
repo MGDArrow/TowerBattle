@@ -58,6 +58,7 @@ class Waves {
     // * Враги на эту волну
     this.enemiesParams.value = Enemies.getEnemiesParams(this.lvl, this.wave.value);
     this.enemyBossPercent.value = this.enemiesParams.value.boss.percent;
+    User.setStageWave(this.wave.value);
   };
 
   tick = (dt: number) => {

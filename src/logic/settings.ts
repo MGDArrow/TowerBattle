@@ -1,5 +1,6 @@
 import CONST from '@/math/const';
 import { computed, ComputedRef, Ref, ref } from 'vue';
+import User from './user';
 
 class Settings {
   static #onlyInstance: Settings | null = null;
@@ -33,6 +34,7 @@ class Settings {
   newGame = (): void => {
     this.gameOver.value = false;
     if (this.game_spead.value === 0) this.game_spead.value = 1;
+    User.addStageEntries();
   };
 
   endGame = (): void => {

@@ -44,6 +44,10 @@ class User {
     User.#onlyInstance = this;
   }
 
+  // BACKEND: метод синхронизации всех данных с базовыми (Улучшения, Уровни)
+  // BACKEND: метод проверки возможности реализации на бекэ (защита)
+  // BACKEND: метод отправки итогов волны
+
   updateCoins = (coins: number): void => {
     this.valuta.value.coins += coins;
   };
@@ -66,6 +70,15 @@ class User {
     if (type === 'coins') this.updateCoins(count);
     if (type === 'diamond') this.updateDiamonds(count);
     if (type === 'ultimate') this.updateUltimates(count);
+  }
+
+  addStageEntries() {
+    this.stages.value[Stages.lvl.value].entries += 1;
+  }
+
+  setStageWave(wave: number) {
+    const counThisMaxWave = this.stages.value[Stages.lvl.value].max;
+    if (counThisMaxWave < wave) this.stages.value[Stages.lvl.value].max = wave;
   }
 }
 
