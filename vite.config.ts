@@ -16,6 +16,7 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
+  base: '/TowerBattle/',
   css: {
     preprocessorOptions: {
       scss: {

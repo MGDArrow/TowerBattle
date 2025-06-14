@@ -75,4 +75,4 @@ export default {
       COEF_BOSS: 5,
     },
   },
-};
+} as const;

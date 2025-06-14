@@ -64,14 +64,6 @@ class User {
     this.exp.value += exp;
   };
 
-  getStagesAward(wave: TStageLvlWaves, count: number, type: TStageAwardType, side: 0 | 1) {
-    const stageLvlCount = Stages.lvl.value;
-    this.stages.value[stageLvlCount].awards[wave][side] = true;
-    if (type === 'coins') this.updateCoins(count);
-    if (type === 'diamond') this.updateDiamonds(count);
-    if (type === 'ultimate') this.updateUltimates(count);
-  }
-
   addStageEntries() {
     this.stages.value[Stages.lvl.value].entries += 1;
   }
@@ -79,6 +71,14 @@ class User {
   setStageWave(wave: number) {
     const counThisMaxWave = this.stages.value[Stages.lvl.value].max;
     if (counThisMaxWave < wave) this.stages.value[Stages.lvl.value].max = wave;
+  }
+
+  getStagesAward(wave: TStageLvlWaves, count: number, type: TStageAwardType, side: 0 | 1) {
+    const stageLvlCount = Stages.lvl.value;
+    this.stages.value[stageLvlCount].awards[wave][side] = true;
+    if (type === 'coins') this.updateCoins(count);
+    if (type === 'diamond') this.updateDiamonds(count);
+    if (type === 'ultimate') this.updateUltimates(count);
   }
 }
 
